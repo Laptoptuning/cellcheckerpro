@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Battery } from '@/types/battery';
 import ColorBar from './ColorBar';
