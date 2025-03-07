@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Sliders, Battery, TestTube, Thermometer, FlaskConical, Save } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 // Default settings values
 const defaultSettings = {
@@ -82,9 +82,9 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white">
+    <div className="min-h-screen flex flex-col bg-neutral-900 text-neutral-100">
       <Navbar />
-      <div className="container mx-auto pt-24 pb-12 px-4">
+      <div className="container mx-auto pt-24 pb-12 px-4 flex-1">
         <h1 className="text-3xl font-bold mb-1">Cell Test Settings</h1>
         <p className="text-neutral-400 mb-6">Configure parameters for battery cell testing</p>
 
@@ -475,6 +475,7 @@ const Settings = () => {
           </Button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
