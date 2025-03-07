@@ -60,9 +60,9 @@ const CircularGauge: React.FC<CircularGaugeProps> = ({
   };
   
   // Calculate SVG parameters
-  const size = size === 'sm' ? 64 : size === 'md' ? 96 : 128;
+  const sizePx = size === 'sm' ? 64 : size === 'md' ? 96 : 128;
   const strokeW = strokeWidth[thickness];
-  const radius = (size / 2) - (strokeW / 2);
+  const radius = (sizePx / 2) - (strokeW / 2);
   const circumference = 2 * Math.PI * radius;
   const dash = (normalizedValue / 100) * circumference;
   const gap = circumference - dash;
@@ -74,11 +74,11 @@ const CircularGauge: React.FC<CircularGaugeProps> = ({
   
   return (
     <div className={cn(`gauge-container ${sizeClasses[size]}`, className)}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="transform -rotate-90">
+      <svg width={sizePx} height={sizePx} viewBox={`0 0 ${sizePx} ${sizePx}`} className="transform -rotate-90">
         {/* Background circle */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={sizePx / 2}
+          cy={sizePx / 2}
           r={radius}
           fill="transparent"
           stroke="#e5e7eb"
@@ -88,8 +88,8 @@ const CircularGauge: React.FC<CircularGaugeProps> = ({
         
         {/* Foreground circle */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={sizePx / 2}
+          cy={sizePx / 2}
           r={radius}
           fill="transparent"
           stroke={color}
@@ -101,7 +101,7 @@ const CircularGauge: React.FC<CircularGaugeProps> = ({
         />
       </svg>
       
-      <div className="gauge-value flex flex-col items-center justify-center w-full h-full">
+      <div className="gauge-value flex flex-col items-center justify-center w-full h-full absolute inset-0">
         <span className={`font-semibold ${valueSizeClass} transition-all duration-300`} style={{ color }}>
           {Math.round(normalizedValue)}%
         </span>
