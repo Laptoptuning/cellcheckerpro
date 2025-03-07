@@ -104,33 +104,37 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         <h3 className="text-lg font-semibold text-neutral-100">{battery.name}</h3>
       </div>
       
-      {/* Modern glossy battery design */}
-      <div className="flex justify-center items-center gap-4 my-3">
-        <div className="relative w-64 h-24 mx-auto">
-          {/* Battery outline */}
-          <div className="absolute inset-0 rounded-full bg-neutral-900 shadow-lg"></div>
-          
-          {/* Battery container */}
-          <div className="absolute inset-0 rounded-full overflow-hidden border border-neutral-600">
-            {/* Glossy battery fill */}
+      {/* Traditional battery design */}
+      <div className="flex justify-center items-center my-3">
+        <div className="relative w-28 h-56 mx-auto">
+          {/* Battery body */}
+          <div className="absolute inset-0 rounded-md bg-neutral-700 border-2 border-neutral-600 overflow-hidden" style={{ borderRadius: '8px 8px 8px 8px' }}>
+            {/* Battery terminals */}
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-10 h-3 bg-neutral-600 rounded-t-md"></div>
+            
+            {/* Battery level */}
             <div 
-              className="h-full transition-all duration-500 relative"
+              className="absolute bottom-0 left-0 right-0 transition-all duration-500"
               style={{ 
-                width: `${battery.soc}%`, 
-                background: `linear-gradient(to bottom, ${getBatteryColor(battery.soc)}bb, ${getBatteryColor(battery.soc)})`,
+                height: `${battery.soc}%`, 
+                background: `linear-gradient(180deg, ${getBatteryColor(battery.soc)}ee, ${getBatteryColor(battery.soc)})`,
               }}
             >
-              {/* Glossy highlight */}
-              <div className="absolute top-0 left-0 right-0 h-[30%] bg-white opacity-30 rounded-t-full"></div>
+              {/* Battery level glossy effect */}
+              <div className="absolute bottom-0 left-0 right-0 h-full opacity-20 bg-gradient-to-t from-transparent to-white"></div>
             </div>
             
-            {/* Battery tip */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-neutral-500 rounded-r-sm"></div>
-          </div>
-          
-          {/* Battery percentage */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-lg font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
+            {/* Battery percentage */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-lg font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
+            </div>
+            
+            {/* Battery segments/indicators */}
+            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+              {[20, 40, 60, 80].map((level) => (
+                <div key={level} className="w-full h-px bg-neutral-600 opacity-50"></div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
