@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Labels from "./pages/Labels";
 import Repacker from "./pages/Repacker";
+import TestedCells from "./pages/TestedCells";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/labels" element={<Labels />} />
           <Route path="/repacker" element={<Repacker />} />
+          <Route path="/tested-cells" element={<TestedCells />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Zap, Package } from 'lucide-react';
+import { Zap, Package, LayoutDashboard, Tag, History, Settings, Database } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
@@ -15,16 +15,42 @@ const Navbar: React.FC = () => {
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-white hover:text-primary transition-colors">Dashboard</Link>
-          <Link to="/labels" className="text-white hover:text-primary transition-colors">Print Labels</Link>
+          <Link to="/" className="text-white hover:text-primary transition-colors">
+            <span className="flex items-center gap-1.5">
+              <LayoutDashboard className="w-4 h-4" />
+              Dashboard
+            </span>
+          </Link>
+          <Link to="/labels" className="text-white hover:text-primary transition-colors">
+            <span className="flex items-center gap-1.5">
+              <Tag className="w-4 h-4" />
+              Print Labels
+            </span>
+          </Link>
           <Link to="/repacker" className="text-white hover:text-primary transition-colors">
             <span className="flex items-center gap-1.5">
               <Package className="w-4 h-4" />
               Repacker
             </span>
           </Link>
-          <Link to="#" className="text-white hover:text-primary transition-colors">History</Link>
-          <Link to="#" className="text-white hover:text-primary transition-colors">Settings</Link>
+          <Link to="/tested-cells" className="text-white hover:text-primary transition-colors">
+            <span className="flex items-center gap-1.5">
+              <Database className="w-4 h-4" />
+              Tested Cells
+            </span>
+          </Link>
+          <Link to="#" className="text-white hover:text-primary transition-colors">
+            <span className="flex items-center gap-1.5">
+              <History className="w-4 h-4" />
+              History
+            </span>
+          </Link>
+          <Link to="#" className="text-white hover:text-primary transition-colors">
+            <span className="flex items-center gap-1.5">
+              <Settings className="w-4 h-4" />
+              Settings
+            </span>
+          </Link>
         </nav>
         
         <div className="flex items-center gap-4">
