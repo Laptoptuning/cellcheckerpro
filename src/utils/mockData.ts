@@ -6,6 +6,12 @@ const randomBetween = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+// Helper function to generate a random float number between min and max with precision
+const randomFloatBetween = (min: number, max: number, precision: number = 2): number => {
+  const value = Math.random() * (max - min) + min;
+  return parseFloat(value.toFixed(precision));
+};
+
 // Helper function to determine battery status based on SOH and SOC
 const determineBatteryStatus = (soh: number, soc: number): 'good' | 'warning' | 'danger' => {
   if (soh < 70 || soc < 10) return 'danger';
@@ -22,6 +28,10 @@ export const generateMockBatteries = (count: number = 16): Battery[] => {
     const esr = randomBetween(15, 100); // 15mΩ to 100mΩ
     const temperature = randomBetween(20, 40); // 20°C to 40°C
     const cycleCount = randomBetween(0, 500);
+    const capacityAh = randomFloatBetween(1.5, 3.5); // 1.5Ah to 3.5Ah
+    const maxVoltage = 4.2; // Standard 18650 lithium-ion max voltage
+    const minVoltage = 2.5; // Safe discharge minimum
+    const storeVoltage = 3.7; // Ideal storage voltage
     
     return {
       id: i + 1,
@@ -34,6 +44,10 @@ export const generateMockBatteries = (count: number = 16): Battery[] => {
       cycleCount,
       status: determineBatteryStatus(soh, soc),
       lastUpdated: new Date(),
+      capacityAh,
+      maxVoltage,
+      minVoltage,
+      storeVoltage
     };
   });
 };

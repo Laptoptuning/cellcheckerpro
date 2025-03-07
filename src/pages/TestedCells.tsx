@@ -38,7 +38,8 @@ const TestedCells: React.FC = () => {
   const exportToCSV = () => {
     // Create CSV content
     const headers = ['ID', 'Name', 'SoC (%)', 'SoH (%)', 'Voltage (V)', 'ESR (mΩ)', 
-                    'Temperature (°C)', 'Cycle Count', 'Status', 'Last Test Date'];
+                    'Temperature (°C)', 'Cycle Count', 'Capacity (Ah)', 'Max Voltage (V)',
+                    'Min Voltage (V)', 'Store Voltage (V)', 'Status', 'Last Test Date'];
     
     const csvRows = [
       headers.join(','),
@@ -51,6 +52,10 @@ const TestedCells: React.FC = () => {
         battery.esr,
         battery.temperature,
         battery.cycleCount,
+        battery.capacityAh || 'N/A',
+        battery.maxVoltage || 'N/A',
+        battery.minVoltage || 'N/A',
+        battery.storeVoltage || 'N/A',
         battery.status,
         new Date(battery.lastUpdated).toLocaleString()
       ].join(','))
@@ -131,6 +136,10 @@ const TestedCells: React.FC = () => {
                     <th className="px-4 py-3 text-neutral-300">SoC</th>
                     <th className="px-4 py-3 text-neutral-300">SoH</th>
                     <th className="px-4 py-3 text-neutral-300">Voltage</th>
+                    <th className="px-4 py-3 text-neutral-300">Capacity</th>
+                    <th className="px-4 py-3 text-neutral-300">Max V</th>
+                    <th className="px-4 py-3 text-neutral-300">Min V</th>
+                    <th className="px-4 py-3 text-neutral-300">Store V</th>
                     <th className="px-4 py-3 text-neutral-300">ESR</th>
                     <th className="px-4 py-3 text-neutral-300">Cycles</th>
                     <th className="px-4 py-3 text-neutral-300">Last Test</th>
@@ -151,6 +160,10 @@ const TestedCells: React.FC = () => {
                         <td className="px-4 py-3 text-white">{battery.soc}%</td>
                         <td className="px-4 py-3 text-white">{battery.soh}%</td>
                         <td className="px-4 py-3 text-white">{battery.voltage.toFixed(2)}V</td>
+                        <td className="px-4 py-3 text-white">{battery.capacityAh ? `${battery.capacityAh.toFixed(2)}Ah` : 'N/A'}</td>
+                        <td className="px-4 py-3 text-white">{battery.maxVoltage ? `${battery.maxVoltage.toFixed(2)}V` : 'N/A'}</td>
+                        <td className="px-4 py-3 text-white">{battery.minVoltage ? `${battery.minVoltage.toFixed(2)}V` : 'N/A'}</td>
+                        <td className="px-4 py-3 text-white">{battery.storeVoltage ? `${battery.storeVoltage.toFixed(2)}V` : 'N/A'}</td>
                         <td className="px-4 py-3 text-white">{battery.esr}mΩ</td>
                         <td className="px-4 py-3 text-white">{battery.cycleCount}</td>
                         <td className="px-4 py-3 text-white">{new Date(battery.lastUpdated).toLocaleString()}</td>
@@ -158,7 +171,7 @@ const TestedCells: React.FC = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={9} className="px-4 py-8 text-center text-neutral-400">
+                      <td colSpan={13} className="px-4 py-8 text-center text-neutral-400">
                         No tested cells found matching current filters.
                       </td>
                     </tr>

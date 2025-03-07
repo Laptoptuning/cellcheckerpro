@@ -15,4 +15,8 @@ export interface Battery {
   isUnderTest?: boolean; // Whether the battery is currently being tested
   currentTest?: TestType; // Current test being performed
   disposed?: boolean; // Whether the battery is marked for disposal
+  capacityAh?: number; // Capacity in Ampere-hours (Ah)
+  maxVoltage?: number; // Maximum voltage (V)
+  minVoltage?: number; // Minimum voltage (V)
+  storeVoltage?: number; // Recommended storage voltage (V)
 }
