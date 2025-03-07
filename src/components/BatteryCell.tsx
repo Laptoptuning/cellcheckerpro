@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Battery } from '@/types/battery';
 import ColorBar from './ColorBar';
@@ -68,16 +67,8 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         <h3 className="text-lg font-semibold text-white">{battery.name}</h3>
       </div>
 
-      {/* Updated indicator */}
-      <div className="absolute top-2 right-2 flex items-center gap-1.5">
-        <div className={cn(
-          'w-2 h-2 rounded-full animate-pulse-smooth',
-          {
-            'bg-success-500': battery.status === 'good',
-            'bg-warning-500': battery.status === 'warning',
-            'bg-danger-500': battery.status === 'danger',
-          }
-        )} />
+      {/* Updated indicator - removed the colored dot */}
+      <div className="absolute top-2 right-2 flex items-center">
         <span className="text-xs text-neutral-300">
           {formatDistanceToNow(battery.lastUpdated, { addSuffix: true })}
         </span>
