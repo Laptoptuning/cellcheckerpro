@@ -1,6 +1,35 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-medium-webfont.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-semibold-webfont.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
 
 @layer base {
   :root {
@@ -13,7 +42,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 211 100% 50%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -32,22 +61,15 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +118,56 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-neutral-50 text-neutral-900 font-['SF_Pro_Display',sans-serif] antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-md bg-white/70 border border-white/20 shadow-sm;
+  }
+
+  .glass-card {
+    @apply glass rounded-2xl transition-all duration-300 hover:shadow-md;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md bg-neutral-900/70 border border-neutral-700/30 shadow-sm;
+  }
+
+  .status-good {
+    @apply text-success-500 bg-success-50 border-success-200;
+  }
+
+  .status-warning {
+    @apply text-warning-500 bg-warning-50 border-warning-200;
+  }
+
+  .status-danger {
+    @apply text-danger-500 bg-danger-50 border-danger-200;
+  }
+
+  .gauge-container {
+    @apply relative flex items-center justify-center;
+  }
+
+  .gauge-value {
+    @apply absolute text-center font-medium text-neutral-800;
+  }
+
+  .battery-cell {
+    @apply p-4 relative overflow-hidden transition-all duration-300;
+  }
+
+  .text-shadow {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg;
   }
 }
