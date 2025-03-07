@@ -14,4 +14,5 @@ export interface Battery {
   lastUpdated: Date; // Last updated timestamp
   isUnderTest?: boolean; // Whether the battery is currently being tested
   currentTest?: TestType; // Current test being performed
+  disposed?: boolean; // Whether the battery is marked for disposal
 }

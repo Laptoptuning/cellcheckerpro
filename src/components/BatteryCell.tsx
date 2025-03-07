@@ -2,7 +2,6 @@
 import React from 'react';
 import { Battery } from '@/types/battery';
 import ColorBar from './ColorBar';
-import StatusIndicator from './StatusIndicator';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
@@ -31,27 +30,6 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
     if (onSelect) onSelect();
   };
   
-  // Determine voltage status
-  const getVoltageStatus = (voltage: number): 'good' | 'warning' | 'danger' => {
-    if (voltage < 3.2) return 'danger';
-    if (voltage < 3.5) return 'warning';
-    return 'good';
-  };
-  
-  // Determine temperature status
-  const getTemperatureStatus = (temp: number): 'good' | 'warning' | 'danger' => {
-    if (temp > 40) return 'danger';
-    if (temp > 35) return 'warning';
-    return 'good';
-  };
-  
-  // Determine ESR status
-  const getEsrStatus = (esr: number): 'good' | 'warning' | 'danger' => {
-    if (esr > 70) return 'danger';
-    if (esr > 40) return 'warning';
-    return 'good';
-  };
-
   // Get battery color based on SOC
   const getBatteryColor = (soc: number): string => {
     if (soc < 20) return '#ef4444'; // red
@@ -102,13 +80,13 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         </span>
       </div>
       
-      {/* Traditional battery design - smaller version */}
-      <div className="flex justify-center items-center my-3">
-        <div className="relative w-20 h-40 mx-auto">
+      {/* Smaller battery icon */}
+      <div className="flex justify-center items-center my-2">
+        <div className="relative w-14 h-28 mx-auto">
           {/* Battery body */}
-          <div className="absolute inset-0 rounded-md bg-neutral-700 border-2 border-neutral-600 overflow-hidden" style={{ borderRadius: '6px 6px 6px 6px' }}>
+          <div className="absolute inset-0 rounded-md bg-neutral-700 border-2 border-neutral-600 overflow-hidden" style={{ borderRadius: '4px 4px 4px 4px' }}>
             {/* Battery terminals */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-8 h-2 bg-neutral-600 rounded-t-md"></div>
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-6 h-1.5 bg-neutral-600 rounded-t-md"></div>
             
             {/* Battery level */}
             <div 
@@ -124,7 +102,7 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
             
             {/* Battery percentage */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-base font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
+              <span className="text-sm font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
             </div>
             
             {/* Battery segments/indicators */}
@@ -144,31 +122,22 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         colorMap={{ 0: '#ef4444', 70: '#f59e0b', 85: '#10b981' }}
       />
       
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-2">
-        <StatusIndicator
-          status={getVoltageStatus(battery.voltage)}
-          icon="voltage"
-          value={battery.voltage}
-          unit="V"
-          size="sm"
-        />
+      {/* Stats grid */}
+      <div className="grid grid-cols-3 gap-2 text-center">
+        <div className="flex flex-col">
+          <span className="text-xs text-neutral-400">Voltage</span>
+          <span className="text-sm font-medium">{battery.voltage.toFixed(2)}V</span>
+        </div>
         
-        <StatusIndicator
-          status={getTemperatureStatus(battery.temperature)}
-          icon="temperature"
-          value={battery.temperature}
-          unit="°C"
-          size="sm"
-        />
+        <div className="flex flex-col">
+          <span className="text-xs text-neutral-400">Temp</span>
+          <span className="text-sm font-medium">{battery.temperature}°C</span>
+        </div>
         
-        <StatusIndicator
-          status={getEsrStatus(battery.esr)}
-          icon="resistance"
-          value={battery.esr}
-          unit="mΩ"
-          size="sm"
-        />
+        <div className="flex flex-col">
+          <span className="text-xs text-neutral-400">ESR</span>
+          <span className="text-sm font-medium">{battery.esr}mΩ</span>
+        </div>
       </div>
     </div>
   );

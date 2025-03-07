@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Battery } from '@/types/battery';
 import BatteryCell from './BatteryCell';
@@ -5,15 +6,18 @@ import { generateMockBatteries, updateBatteryData } from '@/utils/mockData';
 import DetailedView from './DetailedView';
 import { Button } from '@/components/ui/button';
 import { CheckCheck, X } from 'lucide-react';
+import { loadBatteries, saveBattery, seedMockData } from '@/services/batteryStorage';
 
 interface BatteryGridProps {
   onSelectCell?: (cellId: number, selected: boolean) => void;
   selectedCells?: number[];
+  showOnlyAvailable?: boolean;
 }
 
 const BatteryGrid: React.FC<BatteryGridProps> = ({ 
   onSelectCell,
-  selectedCells = []
+  selectedCells = [],
+  showOnlyAvailable = false
 }) => {
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const [selectedBattery, setSelectedBattery] = useState<Battery | null>(null);
@@ -21,18 +25,40 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
   
   // Initialize batteries
   useEffect(() => {
-    const initialBatteries = generateMockBatteries(16);
-    setBatteries(initialBatteries);
+    // Attempt to load from storage first
+    const storedBatteries = loadBatteries();
+    
+    if (storedBatteries.length > 0) {
+      setBatteries(storedBatteries);
+    } else {
+      // No stored batteries, create mock data
+      const initialBatteries = generateMockBatteries(16);
+      setBatteries(initialBatteries);
+      
+      // Seed the storage with initial data
+      seedMockData(initialBatteries);
+    }
     
     // Simulate real-time updates
     const interval = setInterval(() => {
-      setBatteries((prevBatteries) => 
-        prevBatteries.map(battery => updateBatteryData(battery))
-      );
+      setBatteries((prevBatteries) => {
+        const updatedBatteries = prevBatteries.map(battery => {
+          const updated = updateBatteryData(battery);
+          // Save the update to storage
+          saveBattery(updated);
+          return updated;
+        });
+        return updatedBatteries;
+      });
     }, 5000); // Update every 5 seconds
     
     return () => clearInterval(interval);
   }, []);
+  
+  // Filter batteries if needed
+  const displayedBatteries = showOnlyAvailable 
+    ? batteries.filter(b => !(b as any).projectId) 
+    : batteries;
   
   // Handle cell click
   const handleCellClick = (battery: Battery) => {
@@ -57,14 +83,14 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
   const handleSelectAllCells = () => {
     if (onSelectCell) {
       // If all cells are already selected, deselect all
-      if (selectedCells.length === batteries.length) {
-        batteries.forEach(battery => {
+      if (selectedCells.length === displayedBatteries.length) {
+        displayedBatteries.forEach(battery => {
           onSelectCell(battery.id, false);
         });
       } 
       // Otherwise, select all cells
       else {
-        batteries.forEach(battery => {
+        displayedBatteries.forEach(battery => {
           if (!selectedCells.includes(battery.id)) {
             onSelectCell(battery.id, true);
           }
@@ -77,7 +103,7 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
     <div className="w-full">
       <div className="flex justify-between items-center mb-4">
         <div className="text-sm text-neutral-400">
-          {selectedCells.length} of {batteries.length} cells selected
+          {selectedCells.length} of {displayedBatteries.length} cells selected
         </div>
         <Button
           variant="outline" 
@@ -85,7 +111,7 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
           className="flex items-center gap-2 bg-neutral-700 hover:bg-neutral-600 border-neutral-600"
           onClick={handleSelectAllCells}
         >
-          {selectedCells.length === batteries.length ? (
+          {selectedCells.length === displayedBatteries.length ? (
             <>
               <X className="h-4 w-4" />
               <span>Deselect All</span>
@@ -100,7 +126,7 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
-        {batteries.map((battery) => (
+        {displayedBatteries.map((battery) => (
           <BatteryCell 
             key={battery.id} 
             battery={battery} 

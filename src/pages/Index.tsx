@@ -7,6 +7,7 @@ import { toast } from '@/components/ui/use-toast';
 import LoadingState from '@/components/dashboard/LoadingState';
 import TestControls from '@/components/dashboard/TestControls';
 import CellStatusOverview from '@/components/dashboard/CellStatusOverview';
+import { loadBatteries, saveBattery } from '@/services/batteryStorage';
 
 const Index: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +38,19 @@ const Index: React.FC = () => {
     setTestInProgress(true);
     setCurrentTest(testType);
     
+    // Update the battery state in storage to show they're under test
+    const batteries = loadBatteries();
+    selectedCells.forEach(cellId => {
+      const battery = batteries.find(b => b.id === cellId);
+      if (battery) {
+        saveBattery({
+          ...battery,
+          isUnderTest: true,
+          currentTest: testType
+        });
+      }
+    });
+    
     toast({
       title: "Test started",
       description: `Starting ${testType} test for ${selectedCells.length} selected cells.`,
@@ -47,6 +61,19 @@ const Index: React.FC = () => {
   const handleStopTest = () => {
     setTestInProgress(false);
     setCurrentTest(null);
+    
+    // Update the battery state in storage to show they're no longer under test
+    const batteries = loadBatteries();
+    selectedCells.forEach(cellId => {
+      const battery = batteries.find(b => b.id === cellId);
+      if (battery) {
+        saveBattery({
+          ...battery,
+          isUnderTest: false,
+          currentTest: undefined
+        });
+      }
+    });
     
     toast({
       title: "Test stopped",
@@ -65,12 +92,24 @@ const Index: React.FC = () => {
       return;
     }
     
+    // Mark batteries as disposed in storage
+    const batteries = loadBatteries();
+    selectedCells.forEach(cellId => {
+      const battery = batteries.find(b => b.id === cellId);
+      if (battery) {
+        saveBattery({
+          ...battery,
+          status: 'danger',
+          disposed: true
+        });
+      }
+    });
+    
     toast({
       title: "Cells marked for disposal",
       description: `${selectedCells.length} cells marked for disposal.`,
     });
     
-    // In a real app, this would update the cell status in the database
     setSelectedCells([]);
   };
 

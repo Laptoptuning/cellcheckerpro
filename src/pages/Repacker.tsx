@@ -10,12 +10,18 @@ import { toast } from '@/components/ui/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RefreshCw, Package, Battery as BatteryIcon } from 'lucide-react';
 import NewBatteryPackForm from '@/components/repacker/NewBatteryPackForm';
+import { createBatteryProject, loadProjects, BatteryProject } from '@/services/batteryStorage';
+import { formatDistanceToNow } from 'date-fns';
 
 const Repacker: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
+  const [projects, setProjects] = useState<BatteryProject[]>([]);
   
   useEffect(() => {
+    // Load existing projects
+    setProjects(loadProjects());
+    
     // Simulate loading for a smoother first load experience
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -44,16 +50,15 @@ const Repacker: React.FC = () => {
       return;
     }
     
+    // Create the project and save to storage
+    const newProject = createBatteryProject(packName, configuration, selectedCells);
+    
+    // Update the UI
+    setProjects(prev => [newProject, ...prev]);
+    
     toast({
       title: "Battery pack created",
       description: `Created ${packName} with ${selectedCells.length} cells in ${configuration} configuration.`,
-    });
-    
-    // In a real app, this would send the data to the backend
-    console.log("Creating battery pack:", {
-      name: packName,
-      configuration: configuration,
-      cells: selectedCells
     });
     
     // Reset selection after creating pack
@@ -96,6 +101,7 @@ const Repacker: React.FC = () => {
                       <BatteryGrid 
                         onSelectCell={handleCellSelection} 
                         selectedCells={selectedCells}
+                        showOnlyAvailable={true}
                       />
                     </TabsContent>
                     <TabsContent value="recommended" className="mt-0">
@@ -133,23 +139,33 @@ const Repacker: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="p-4 rounded-lg bg-neutral-750 border border-neutral-700">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                          <Package className="h-5 w-5 text-primary" />
+                  {projects.length > 0 ? (
+                    projects.map((project) => (
+                      <div key={project.id} className="p-4 rounded-lg bg-neutral-750 border border-neutral-700">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                            <Package className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-medium">{project.name}</h3>
+                            <p className="text-sm text-neutral-400">
+                              {formatDistanceToNow(project.createdAt, { addSuffix: true })}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-medium">Battery Pack #{i}</h3>
-                          <p className="text-sm text-neutral-400">Created 2 days ago</p>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-neutral-400">{project.batteryIds.length} cells</span>
+                          <span className="text-neutral-400">{project.configuration}</span>
                         </div>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-neutral-400">12 cells</span>
-                        <span className="text-neutral-400">4S3P</span>
-                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-1 md:col-span-2 lg:col-span-3 p-6 text-center text-neutral-400">
+                      <Package className="mx-auto h-12 w-12 text-neutral-500 mb-3" />
+                      <h3 className="text-lg font-medium text-neutral-300 mb-2">No Battery Packs Yet</h3>
+                      <p>Select cells and create your first battery pack.</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
