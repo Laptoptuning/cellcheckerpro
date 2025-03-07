@@ -30,14 +30,12 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
     if (onSelect) onSelect();
   };
   
-  // Get battery color based on status (more vibrant colors)
-  const getBatteryColor = (status: 'good' | 'warning' | 'danger'): string => {
-    switch(status) {
-      case 'good': return '#22c55e'; // more vibrant green
-      case 'warning': return '#f97316'; // more vibrant orange
-      case 'danger': return '#ef4444'; // vibrant red
-      default: return '#22c55e';
-    }
+  // Get battery color based on percentage
+  const getBatteryColor = (percentage: number): string => {
+    if (percentage <= 25) return '#ea384c'; // Red for 0-25%
+    if (percentage <= 50) return '#f97316'; // Orange for 26-50%
+    if (percentage <= 75) return '#fef7cd'; // Yellow for 51-75%
+    return '#22c55e'; // Green for 76-100%
   };
   
   return (
@@ -88,17 +86,27 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
               className="absolute bottom-0 left-0 right-0 transition-all duration-500"
               style={{ 
                 height: `${battery.soc}%`, 
-                background: getBatteryColor(battery.status),
-                boxShadow: `0 0 10px ${getBatteryColor(battery.status)}80`,
+                background: getBatteryColor(battery.soc),
+                boxShadow: `0 0 10px ${getBatteryColor(battery.soc)}80`,
               }}
             >
               {/* Battery level glossy effect */}
               <div className="absolute bottom-0 left-0 right-0 h-full opacity-20 bg-gradient-to-t from-transparent to-white"></div>
             </div>
             
-            {/* Battery percentage */}
+            {/* Battery percentage - text color based on visibility */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-sm font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
+              <span 
+                className={cn(
+                  "text-sm font-bold drop-shadow-md",
+                  { 
+                    "text-neutral-800": battery.soc > 50 && battery.soc <= 75, // Darker text for yellow background
+                    "text-white": battery.soc <= 50 || battery.soc > 75 // White text for other colors
+                  }
+                )}
+              >
+                {Math.round(battery.soc)}%
+              </span>
             </div>
             
             {/* Battery segments/indicators */}
