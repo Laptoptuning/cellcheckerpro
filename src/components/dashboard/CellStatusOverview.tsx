@@ -17,17 +17,17 @@ const CellStatusOverview: React.FC<CellStatusOverviewProps> = ({
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle className="text-neutral-100">Cell Status Overview</CardTitle>
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-4 text-sm">
             <span className="flex items-center">
-              <span className="inline-block w-2 h-2 rounded-full bg-success-500 mr-1"></span>
+              <span className="inline-block w-3 h-3 rounded-full bg-success-500 mr-1.5"></span>
               <span className="text-neutral-300">Good</span>
             </span>
             <span className="flex items-center">
-              <span className="inline-block w-2 h-2 rounded-full bg-warning-500 mr-1"></span>
+              <span className="inline-block w-3 h-3 rounded-full bg-warning-500 mr-1.5"></span>
               <span className="text-neutral-300">Warning</span>
             </span>
             <span className="flex items-center">
-              <span className="inline-block w-2 h-2 rounded-full bg-danger-500 mr-1"></span>
+              <span className="inline-block w-3 h-3 rounded-full bg-danger-500 mr-1.5"></span>
               <span className="text-neutral-300">Critical</span>
             </span>
           </div>

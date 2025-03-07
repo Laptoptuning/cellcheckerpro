@@ -64,9 +64,6 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
       className={cn(
         'battery-cell relative p-5 flex flex-col gap-4 cursor-pointer bg-neutral-800 border border-neutral-700 rounded-xl hover:bg-neutral-750 transition-all',
         {
-          'ring-2 ring-success-500': battery.status === 'good',
-          'ring-2 ring-warning-500': battery.status === 'warning',
-          'ring-2 ring-danger-500': battery.status === 'danger',
           'bg-neutral-750 border-primary': isSelected,
         },
         className
@@ -107,13 +104,12 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         <h3 className="text-lg font-semibold text-neutral-100">{battery.name}</h3>
         <StatusIndicator 
           status={battery.status} 
-          value={battery.cycleCount} 
-          unit="cy"
+          value={battery.status.charAt(0).toUpperCase() + battery.status.slice(1)}
           size="sm"
         />
       </div>
       
-      {/* Battery icon and SOC - MADE BIGGER */}
+      {/* Battery icon and SOC - IMPROVED BATTERY FILL */}
       <div className="flex justify-center items-center gap-4 my-2">
         <div className="relative flex items-center justify-center">
           <BatteryIcon 
@@ -121,11 +117,11 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
             className="text-neutral-600"
           />
           <div 
-            className="absolute inset-0 flex items-center" 
-            style={{ paddingLeft: '6px', paddingRight: '8px' }}
+            className="absolute inset-0 flex items-center justify-start"
+            style={{ width: '83%', left: '2px', right: '15%' }}
           >
             <div 
-              className="h-4 rounded-sm transition-all duration-500" 
+              className="h-[60%] rounded-sm transition-all duration-500" 
               style={{ 
                 width: `${battery.soc}%`, 
                 backgroundColor: getBatteryColor(battery.soc),
