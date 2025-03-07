@@ -113,19 +113,19 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         />
       </div>
       
-      {/* Battery icon and SOC */}
-      <div className="flex justify-center items-center gap-3 my-1">
+      {/* Battery icon and SOC - MADE BIGGER */}
+      <div className="flex justify-center items-center gap-4 my-2">
         <div className="relative flex items-center justify-center">
           <BatteryIcon 
-            size={48} 
+            size={64} 
             className="text-neutral-600"
           />
           <div 
             className="absolute inset-0 flex items-center" 
-            style={{ paddingLeft: '4px', paddingRight: '6px' }}
+            style={{ paddingLeft: '6px', paddingRight: '8px' }}
           >
             <div 
-              className="h-3 rounded-sm transition-all duration-500" 
+              className="h-4 rounded-sm transition-all duration-500" 
               style={{ 
                 width: `${battery.soc}%`, 
                 backgroundColor: getBatteryColor(battery.soc),
@@ -133,10 +133,10 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
               }} 
             />
           </div>
-          <span className="absolute text-xs font-semibold text-white">{Math.round(battery.soc)}%</span>
+          <span className="absolute text-sm font-semibold text-white">{Math.round(battery.soc)}%</span>
         </div>
         <div className="flex flex-col items-start">
-          <span className="text-lg font-semibold text-neutral-100">{battery.voltage.toFixed(1)}V</span>
+          <span className="text-xl font-semibold text-neutral-100">{battery.voltage.toFixed(1)}V</span>
           <span className="text-xs text-neutral-400">State of Charge</span>
         </div>
       </div>
