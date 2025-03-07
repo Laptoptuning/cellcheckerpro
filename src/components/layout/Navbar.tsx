@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { Zap, Package, LayoutDashboard, Tag, History, Settings, Database } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
+  const location = useLocation();
+  
   return (
     <header className="w-full border-b border-neutral-800 backdrop-blur-lg fixed top-0 z-50 bg-neutral-900/90">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -15,37 +17,55 @@ const Navbar: React.FC = () => {
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-white hover:text-primary transition-colors">
+          <Link 
+            to="/" 
+            className={`${location.pathname === '/' ? 'text-primary' : 'text-white'} hover:text-primary transition-colors`}
+          >
             <span className="flex items-center gap-1.5">
               <LayoutDashboard className="w-4 h-4" />
               Dashboard
             </span>
           </Link>
-          <Link to="/labels" className="text-white hover:text-primary transition-colors">
+          <Link 
+            to="/labels" 
+            className={`${location.pathname === '/labels' ? 'text-primary' : 'text-white'} hover:text-primary transition-colors`}
+          >
             <span className="flex items-center gap-1.5">
               <Tag className="w-4 h-4" />
               Print Labels
             </span>
           </Link>
-          <Link to="/repacker" className="text-white hover:text-primary transition-colors">
+          <Link 
+            to="/repacker" 
+            className={`${location.pathname === '/repacker' ? 'text-primary' : 'text-white'} hover:text-primary transition-colors`}
+          >
             <span className="flex items-center gap-1.5">
               <Package className="w-4 h-4" />
               Repacker
             </span>
           </Link>
-          <Link to="/tested-cells" className="text-white hover:text-primary transition-colors">
+          <Link 
+            to="/tested-cells" 
+            className={`${location.pathname === '/tested-cells' ? 'text-primary' : 'text-white'} hover:text-primary transition-colors`}
+          >
             <span className="flex items-center gap-1.5">
               <Database className="w-4 h-4" />
               Tested Cells
             </span>
           </Link>
-          <Link to="#" className="text-white hover:text-primary transition-colors">
+          <Link 
+            to="#" 
+            className="text-white hover:text-primary transition-colors"
+          >
             <span className="flex items-center gap-1.5">
               <History className="w-4 h-4" />
               History
             </span>
           </Link>
-          <Link to="#" className="text-white hover:text-primary transition-colors">
+          <Link 
+            to="/settings" 
+            className={`${location.pathname === '/settings' ? 'text-primary' : 'text-white'} hover:text-primary transition-colors`}
+          >
             <span className="flex items-center gap-1.5">
               <Settings className="w-4 h-4" />
               Settings

@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Labels from "./pages/Labels";
 import Repacker from "./pages/Repacker";
 import TestedCells from "./pages/TestedCells";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/labels" element={<Labels />} />
           <Route path="/repacker" element={<Repacker />} />
           <Route path="/tested-cells" element={<TestedCells />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
