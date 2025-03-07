@@ -1,12 +1,11 @@
 
 import React from 'react';
 import { Battery } from '@/types/battery';
-import CircularGauge from './CircularGauge';
 import ColorBar from './ColorBar';
 import StatusIndicator from './StatusIndicator';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { Check, Battery as BatteryIcon } from 'lucide-react';
 
 interface BatteryCellProps {
   battery: Battery;
@@ -51,6 +50,13 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
     if (esr > 70) return 'danger';
     if (esr > 40) return 'warning';
     return 'good';
+  };
+
+  // Get battery icon color based on SOC
+  const getBatteryColor = (soc: number): string => {
+    if (soc < 20) return '#ef4444'; // red
+    if (soc < 50) return '#f59e0b'; // amber
+    return '#10b981'; // green
   };
   
   return (
@@ -107,13 +113,32 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         />
       </div>
       
-      {/* SOC gauge */}
-      <div className="flex justify-center">
-        <CircularGauge 
-          value={battery.soc} 
-          label="SoC" 
-          colorMap={{ 0: '#ef4444', 20: '#f59e0b', 50: '#10b981' }}
-        />
+      {/* Battery icon and SOC */}
+      <div className="flex justify-center items-center gap-3 my-1">
+        <div className="relative flex items-center justify-center">
+          <BatteryIcon 
+            size={48} 
+            className="text-neutral-600"
+          />
+          <div 
+            className="absolute inset-0 flex items-center" 
+            style={{ paddingLeft: '4px', paddingRight: '6px' }}
+          >
+            <div 
+              className="h-3 rounded-sm transition-all duration-500" 
+              style={{ 
+                width: `${battery.soc}%`, 
+                backgroundColor: getBatteryColor(battery.soc),
+                maxWidth: '100%'
+              }} 
+            />
+          </div>
+          <span className="absolute text-xs font-semibold text-white">{Math.round(battery.soc)}%</span>
+        </div>
+        <div className="flex flex-col items-start">
+          <span className="text-lg font-semibold text-neutral-100">{battery.voltage.toFixed(1)}V</span>
+          <span className="text-xs text-neutral-400">State of Charge</span>
+        </div>
       </div>
       
       {/* SOH bar */}

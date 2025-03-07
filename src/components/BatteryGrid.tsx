@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Battery } from '@/types/battery';
 import BatteryCell from './BatteryCell';
 import { generateMockBatteries, updateBatteryData } from '@/utils/mockData';
 import DetailedView from './DetailedView';
+import { Button } from '@/components/ui/button';
+import { CheckCheck, X } from 'lucide-react';
 
 interface BatteryGridProps {
   onSelectCell?: (cellId: number, selected: boolean) => void;
@@ -51,9 +52,53 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  // Handle select all cells
+  const handleSelectAllCells = () => {
+    if (onSelectCell) {
+      // If all cells are already selected, deselect all
+      if (selectedCells.length === batteries.length) {
+        batteries.forEach(battery => {
+          onSelectCell(battery.id, false);
+        });
+      } 
+      // Otherwise, select all cells
+      else {
+        batteries.forEach(battery => {
+          if (!selectedCells.includes(battery.id)) {
+            onSelectCell(battery.id, true);
+          }
+        });
+      }
+    }
+  };
   
   return (
     <div className="w-full">
+      <div className="flex justify-between items-center mb-4">
+        <div className="text-sm text-neutral-400">
+          {selectedCells.length} of {batteries.length} cells selected
+        </div>
+        <Button
+          variant="outline" 
+          size="sm"
+          className="flex items-center gap-2 bg-neutral-700 hover:bg-neutral-600 border-neutral-600"
+          onClick={handleSelectAllCells}
+        >
+          {selectedCells.length === batteries.length ? (
+            <>
+              <X className="h-4 w-4" />
+              <span>Deselect All</span>
+            </>
+          ) : (
+            <>
+              <CheckCheck className="h-4 w-4" />
+              <span>Select All</span>
+            </>
+          )}
+        </Button>
+      </div>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
         {batteries.map((battery) => (
           <BatteryCell 
