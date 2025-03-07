@@ -11,24 +11,24 @@ const Navbar: React.FC = () => {
           <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
             <Zap className="w-5 h-5 text-white" />
           </div>
-          <div className="font-medium text-xl text-neutral-100">Ultimate Cell Tester</div>
+          <div className="font-medium text-xl text-white">Ultimate Cell Tester</div>
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-neutral-300 hover:text-primary transition-colors">Dashboard</Link>
-          <Link to="/labels" className="text-neutral-300 hover:text-primary transition-colors">Print Labels</Link>
-          <Link to="/repacker" className="text-neutral-300 hover:text-primary transition-colors">
+          <Link to="/" className="text-white hover:text-primary transition-colors">Dashboard</Link>
+          <Link to="/labels" className="text-white hover:text-primary transition-colors">Print Labels</Link>
+          <Link to="/repacker" className="text-white hover:text-primary transition-colors">
             <span className="flex items-center gap-1.5">
               <Package className="w-4 h-4" />
               Repacker
             </span>
           </Link>
-          <Link to="#" className="text-neutral-300 hover:text-primary transition-colors">History</Link>
-          <Link to="#" className="text-neutral-300 hover:text-primary transition-colors">Settings</Link>
+          <Link to="#" className="text-white hover:text-primary transition-colors">History</Link>
+          <Link to="#" className="text-white hover:text-primary transition-colors">Settings</Link>
         </nav>
         
         <div className="flex items-center gap-4">
-          <button className="py-1.5 px-3 rounded-md border border-neutral-700 text-sm font-medium text-neutral-300 hover:bg-neutral-800 transition-colors">
+          <button className="py-1.5 px-3 rounded-md border border-neutral-700 text-sm font-medium text-white hover:bg-neutral-800 transition-colors">
             Connect
           </button>
           

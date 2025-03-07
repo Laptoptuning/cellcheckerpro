@@ -65,7 +65,7 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         >
           {isSelected && <Check className="w-3 h-3 text-white" />}
         </div>
-        <h3 className="text-lg font-semibold text-neutral-100">{battery.name}</h3>
+        <h3 className="text-lg font-semibold text-white">{battery.name}</h3>
       </div>
 
       {/* Updated indicator */}
@@ -78,7 +78,7 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
             'bg-danger-500': battery.status === 'danger',
           }
         )} />
-        <span className="text-xs text-neutral-400">
+        <span className="text-xs text-neutral-300">
           {formatDistanceToNow(battery.lastUpdated, { addSuffix: true })}
         </span>
       </div>
@@ -129,18 +129,18 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
       {/* Stats grid */}
       <div className="grid grid-cols-3 gap-2 text-center">
         <div className="flex flex-col">
-          <span className="text-xs text-neutral-400">Voltage</span>
-          <span className="text-sm font-medium">{battery.voltage.toFixed(2)}V</span>
+          <span className="text-xs text-neutral-300">Voltage</span>
+          <span className="text-sm font-medium text-white">{battery.voltage.toFixed(2)}V</span>
         </div>
         
         <div className="flex flex-col">
-          <span className="text-xs text-neutral-400">Temp</span>
-          <span className="text-sm font-medium">{battery.temperature}°C</span>
+          <span className="text-xs text-neutral-300">Temp</span>
+          <span className="text-sm font-medium text-white">{battery.temperature}°C</span>
         </div>
         
         <div className="flex flex-col">
-          <span className="text-xs text-neutral-400">ESR</span>
-          <span className="text-sm font-medium">{battery.esr}mΩ</span>
+          <span className="text-xs text-neutral-300">ESR</span>
+          <span className="text-sm font-medium text-white">{battery.esr}mΩ</span>
         </div>
       </div>
     </div>

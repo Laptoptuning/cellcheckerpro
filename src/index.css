@@ -170,4 +170,17 @@
   .hover-lift {
     @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg;
   }
+  
+  /* Add improved color classes for dark backgrounds */
+  .dark-card-text {
+    @apply text-white;
+  }
+  
+  .dark-card-secondary {
+    @apply text-neutral-300;
+  }
+  
+  .dark-card-muted {
+    @apply text-neutral-400;
+  }
 }

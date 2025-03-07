@@ -13,25 +13,25 @@ const StatusCard: React.FC<StatusCardProps> = ({ currentTest, selectedCells, tes
   return (
     <Card className="bg-neutral-800 border-neutral-700">
       <CardHeader>
-        <CardTitle className="text-neutral-100">Status</CardTitle>
-        <CardDescription className="text-neutral-400">Current test progress</CardDescription>
+        <CardTitle className="text-white">Status</CardTitle>
+        <CardDescription className="text-neutral-300">Current test progress</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-neutral-400 mb-1">Test Type:</p>
-            <p className="text-lg font-medium">
+            <p className="text-sm text-neutral-300 mb-1">Test Type:</p>
+            <p className="text-lg font-medium text-white">
               {currentTest ? currentTest.charAt(0).toUpperCase() + currentTest.slice(1) : 'None'}
             </p>
           </div>
           
           <div>
-            <p className="text-sm text-neutral-400 mb-1">Cells Selected:</p>
-            <p className="text-lg font-medium">{selectedCells.length}</p>
+            <p className="text-sm text-neutral-300 mb-1">Cells Selected:</p>
+            <p className="text-lg font-medium text-white">{selectedCells.length}</p>
           </div>
           
           <div>
-            <p className="text-sm text-neutral-400 mb-1">Status:</p>
+            <p className="text-sm text-neutral-300 mb-1">Status:</p>
             <div className="flex items-center gap-2">
               {testInProgress ? (
                 <>
@@ -41,7 +41,7 @@ const StatusCard: React.FC<StatusCardProps> = ({ currentTest, selectedCells, tes
               ) : (
                 <>
                   <span className="h-2 w-2 bg-neutral-500 rounded-full"></span>
-                  <p className="text-neutral-400">Idle</p>
+                  <p className="text-neutral-300">Idle</p>
                 </>
               )}
             </div>
