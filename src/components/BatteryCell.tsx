@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Battery } from '@/types/battery';
 import ColorBar from './ColorBar';
@@ -30,12 +29,12 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
     if (onSelect) onSelect();
   };
   
-  // Get battery color based on percentage
+  // Get battery color based on percentage with more vibrant colors
   const getBatteryColor = (percentage: number): string => {
-    if (percentage <= 25) return '#ea384c'; // Red for 0-25%
-    if (percentage <= 50) return '#f97316'; // Orange for 26-50%
-    if (percentage <= 75) return '#fef7cd'; // Yellow for 51-75%
-    return '#22c55e'; // Green for 76-100%
+    if (percentage <= 25) return '#FF3B30'; // Bright red for 0-25%
+    if (percentage <= 50) return '#FF9500'; // Bright orange for 26-50%
+    if (percentage <= 75) return '#FFCC00'; // True bright yellow for 51-75%
+    return '#4CD964'; // Vibrant green for 76-100%
   };
   
   return (
@@ -81,17 +80,17 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
             {/* Battery terminals */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-5 h-1.5 bg-neutral-600 rounded-t-md"></div>
             
-            {/* Battery level */}
+            {/* Battery level with more vibrant colors */}
             <div 
               className="absolute bottom-0 left-0 right-0 transition-all duration-500"
               style={{ 
                 height: `${battery.soc}%`, 
                 background: getBatteryColor(battery.soc),
-                boxShadow: `0 0 10px ${getBatteryColor(battery.soc)}80`,
+                boxShadow: `0 0 15px ${getBatteryColor(battery.soc)}`,
               }}
             >
               {/* Battery level glossy effect */}
-              <div className="absolute bottom-0 left-0 right-0 h-full opacity-20 bg-gradient-to-t from-transparent to-white"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-full opacity-30 bg-gradient-to-t from-transparent to-white"></div>
             </div>
             
             {/* Battery percentage - text color based on visibility */}
