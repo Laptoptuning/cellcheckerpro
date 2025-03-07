@@ -157,8 +157,8 @@ const TestedCells: React.FC = () => {
                             <span className="text-white capitalize">{battery.status}</span>
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-white">{battery.soc}%</td>
-                        <td className="px-4 py-3 text-white">{battery.soh}%</td>
+                        <td className="px-4 py-3 text-white">{battery.soc.toFixed(2)}%</td>
+                        <td className="px-4 py-3 text-white">{battery.soh.toFixed(2)}%</td>
                         <td className="px-4 py-3 text-white">{battery.voltage.toFixed(2)}V</td>
                         <td className="px-4 py-3 text-white">{battery.capacityAh ? `${battery.capacityAh.toFixed(2)}Ah` : 'N/A'}</td>
                         <td className="px-4 py-3 text-white">{battery.maxVoltage ? `${battery.maxVoltage.toFixed(2)}V` : 'N/A'}</td>
