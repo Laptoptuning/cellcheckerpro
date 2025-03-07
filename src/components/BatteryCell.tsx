@@ -70,18 +70,21 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
       )}
       onClick={handleClick}
     >
-      {/* Selection checkbox */}
-      <div 
-        className={cn(
-          "absolute top-2 left-2 w-5 h-5 rounded-full border border-neutral-600 z-10 cursor-pointer flex items-center justify-center",
-          {
-            "bg-primary border-primary": isSelected,
-            "hover:border-primary": !isSelected
-          }
-        )}
-        onClick={handleSelectClick}
-      >
-        {isSelected && <Check className="w-3 h-3 text-white" />}
+      {/* Header with selection checkbox and cell name */}
+      <div className="flex justify-between items-center">
+        <div 
+          className={cn(
+            "w-5 h-5 rounded-full border border-neutral-600 z-10 cursor-pointer flex items-center justify-center",
+            {
+              "bg-primary border-primary": isSelected,
+              "hover:border-primary": !isSelected
+            }
+          )}
+          onClick={handleSelectClick}
+        >
+          {isSelected && <Check className="w-3 h-3 text-white" />}
+        </div>
+        <h3 className="text-lg font-semibold text-neutral-100">{battery.name}</h3>
       </div>
 
       {/* Updated indicator */}
@@ -99,18 +102,13 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         </span>
       </div>
       
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-neutral-100">{battery.name}</h3>
-      </div>
-      
-      {/* Traditional battery design */}
+      {/* Traditional battery design - smaller version */}
       <div className="flex justify-center items-center my-3">
-        <div className="relative w-28 h-56 mx-auto">
+        <div className="relative w-20 h-40 mx-auto">
           {/* Battery body */}
-          <div className="absolute inset-0 rounded-md bg-neutral-700 border-2 border-neutral-600 overflow-hidden" style={{ borderRadius: '8px 8px 8px 8px' }}>
+          <div className="absolute inset-0 rounded-md bg-neutral-700 border-2 border-neutral-600 overflow-hidden" style={{ borderRadius: '6px 6px 6px 6px' }}>
             {/* Battery terminals */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-10 h-3 bg-neutral-600 rounded-t-md"></div>
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-8 h-2 bg-neutral-600 rounded-t-md"></div>
             
             {/* Battery level */}
             <div 
@@ -126,7 +124,7 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
             
             {/* Battery percentage */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-lg font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
+              <span className="text-base font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
             </div>
             
             {/* Battery segments/indicators */}

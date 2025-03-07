@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Zap } from 'lucide-react';
+import { Zap, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
@@ -17,6 +17,12 @@ const Navbar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-6">
           <Link to="/" className="text-neutral-300 hover:text-primary transition-colors">Dashboard</Link>
           <Link to="/labels" className="text-neutral-300 hover:text-primary transition-colors">Print Labels</Link>
+          <Link to="/repacker" className="text-neutral-300 hover:text-primary transition-colors">
+            <span className="flex items-center gap-1.5">
+              <Package className="w-4 h-4" />
+              Repacker
+            </span>
+          </Link>
           <Link to="#" className="text-neutral-300 hover:text-primary transition-colors">History</Link>
           <Link to="#" className="text-neutral-300 hover:text-primary transition-colors">Settings</Link>
         </nav>
