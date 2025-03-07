@@ -128,12 +128,12 @@ const CellSpecifications: React.FC<CellSpecificationsProps> = ({ battery, classN
             <div className="mt-1 grid grid-cols-2 gap-2">
               <div>
                 <span className="text-xs text-neutral-400">Original Capacity</span>
-                <div className="text-base font-medium text-white">{battery.capacity?.toFixed(2) || "2.50"}Ah</div>
+                <div className="text-base font-medium text-white">{battery.capacityAh?.toFixed(2) || "2.50"}Ah</div>
               </div>
               <div>
                 <span className="text-xs text-neutral-400">Measured Capacity</span>
                 <div className="text-base font-medium text-white">
-                  {((battery.capacity || 2.5) * (battery.soh / 100)).toFixed(2)}Ah
+                  {((battery.capacityAh || 2.5) * (battery.soh / 100)).toFixed(2)}Ah
                 </div>
               </div>
             </div>
@@ -206,7 +206,7 @@ const CellSpecifications: React.FC<CellSpecificationsProps> = ({ battery, classN
               <Clock className="h-4 w-4" />
               <span>Manufacture Date</span>
             </div>
-            <span className="text-lg font-medium text-white">{battery.manufactureDate || "Unknown"}</span>
+            <span className="text-lg font-medium text-white">Unknown</span>
           </div>
         </div>
       </CardContent>
