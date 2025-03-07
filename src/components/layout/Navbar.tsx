@@ -8,10 +8,10 @@ const Navbar: React.FC = () => {
     <header className="w-full border-b border-neutral-800 backdrop-blur-lg fixed top-0 z-50 bg-neutral-900/90">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
+          <div className="w-8 h-8 rounded-md bg-green-500 flex items-center justify-center">
             <Zap className="w-5 h-5 text-white" />
           </div>
-          <div className="font-medium text-xl text-white">Ultimate Cell Tester</div>
+          <div className="font-medium text-xl text-white">CellChecker Pro</div>
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
