@@ -19,15 +19,15 @@ const CellStatusOverview: React.FC<CellStatusOverviewProps> = ({
           <CardTitle className="text-neutral-100">Cell Status Overview</CardTitle>
           <div className="flex items-center gap-4 text-sm">
             <span className="flex items-center">
-              <span className="inline-block w-3 h-3 rounded-full bg-success-500 mr-1.5"></span>
+              <span className="inline-block w-3 h-3 rounded-full bg-[#22c55e] mr-1.5 shadow-sm shadow-[#22c55e]/50"></span>
               <span className="text-neutral-300">Good</span>
             </span>
             <span className="flex items-center">
-              <span className="inline-block w-3 h-3 rounded-full bg-warning-500 mr-1.5"></span>
+              <span className="inline-block w-3 h-3 rounded-full bg-[#f97316] mr-1.5 shadow-sm shadow-[#f97316]/50"></span>
               <span className="text-neutral-300">Warning</span>
             </span>
             <span className="flex items-center">
-              <span className="inline-block w-3 h-3 rounded-full bg-danger-500 mr-1.5"></span>
+              <span className="inline-block w-3 h-3 rounded-full bg-[#ef4444] mr-1.5 shadow-sm shadow-[#ef4444]/50"></span>
               <span className="text-neutral-300">Critical</span>
             </span>
           </div>

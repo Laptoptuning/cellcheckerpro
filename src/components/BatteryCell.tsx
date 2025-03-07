@@ -30,11 +30,14 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
     if (onSelect) onSelect();
   };
   
-  // Get battery color based on SOC
-  const getBatteryColor = (soc: number): string => {
-    if (soc < 20) return '#ef4444'; // red
-    if (soc < 50) return '#f59e0b'; // amber
-    return '#10b981'; // green
+  // Get battery color based on status (more vibrant colors)
+  const getBatteryColor = (status: 'good' | 'warning' | 'danger'): string => {
+    switch(status) {
+      case 'good': return '#22c55e'; // more vibrant green
+      case 'warning': return '#f97316'; // more vibrant orange
+      case 'danger': return '#ef4444'; // vibrant red
+      default: return '#22c55e';
+    }
   };
   
   return (
@@ -49,7 +52,7 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
       onClick={handleClick}
     >
       {/* Header with selection checkbox and cell name */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-2">
         <div 
           className={cn(
             "w-5 h-5 rounded-full border border-neutral-600 z-10 cursor-pointer flex items-center justify-center",
@@ -80,20 +83,21 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
         </span>
       </div>
       
-      {/* Smaller battery icon */}
+      {/* Smaller battery icon with vibrant colors */}
       <div className="flex justify-center items-center my-2">
-        <div className="relative w-14 h-28 mx-auto">
+        <div className="relative w-12 h-24 mx-auto">
           {/* Battery body */}
           <div className="absolute inset-0 rounded-md bg-neutral-700 border-2 border-neutral-600 overflow-hidden" style={{ borderRadius: '4px 4px 4px 4px' }}>
             {/* Battery terminals */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-6 h-1.5 bg-neutral-600 rounded-t-md"></div>
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-5 h-1.5 bg-neutral-600 rounded-t-md"></div>
             
             {/* Battery level */}
             <div 
               className="absolute bottom-0 left-0 right-0 transition-all duration-500"
               style={{ 
                 height: `${battery.soc}%`, 
-                background: `linear-gradient(180deg, ${getBatteryColor(battery.soc)}ee, ${getBatteryColor(battery.soc)})`,
+                background: getBatteryColor(battery.status),
+                boxShadow: `0 0 10px ${getBatteryColor(battery.status)}80`,
               }}
             >
               {/* Battery level glossy effect */}
@@ -119,7 +123,7 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
       <ColorBar 
         value={battery.soh} 
         label="SoH" 
-        colorMap={{ 0: '#ef4444', 70: '#f59e0b', 85: '#10b981' }}
+        colorMap={{ 0: '#6b7280', 50: '#9ca3af', 85: '#d1d5db' }}
       />
       
       {/* Stats grid */}
