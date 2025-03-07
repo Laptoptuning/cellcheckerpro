@@ -18,7 +18,7 @@ const ESRSettings = ({ settings, onSettingChange }: ESRSettingsProps) => {
     <Card className="bg-neutral-800 border-neutral-700">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <TestTube className="h-5 w-5 text-primary" />
+          <TestTube className="h-6 w-6 text-neutral-100" />
           ESR Test Settings
         </CardTitle>
         <CardDescription>
@@ -28,7 +28,7 @@ const ESRSettings = ({ settings, onSettingChange }: ESRSettingsProps) => {
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="pulseCurrent" className="text-sm font-medium">
+            <label htmlFor="pulseCurrent" className="text-sm font-medium text-neutral-100">
               Pulse Current (A)
             </label>
             <Input
@@ -43,7 +43,7 @@ const ESRSettings = ({ settings, onSettingChange }: ESRSettingsProps) => {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="pulseLength" className="text-sm font-medium">
+            <label htmlFor="pulseLength" className="text-sm font-medium text-neutral-100">
               Pulse Length (ms)
             </label>
             <Input
@@ -57,7 +57,7 @@ const ESRSettings = ({ settings, onSettingChange }: ESRSettingsProps) => {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="measurements" className="text-sm font-medium">
+            <label htmlFor="measurements" className="text-sm font-medium text-neutral-100">
               Number of Measurements
             </label>
             <Input

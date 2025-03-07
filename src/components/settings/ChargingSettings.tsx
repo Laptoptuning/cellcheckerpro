@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,7 +20,7 @@ const ChargingSettings = ({
   return <Card className="bg-neutral-800 border-neutral-700">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-slate-50">
-          <Battery className="h-5 w-5 text-primary" />
+          <Battery className="h-6 w-6 text-neutral-100" />
           Charging Test Settings
         </CardTitle>
         <CardDescription>
@@ -29,7 +30,7 @@ const ChargingSettings = ({
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="maxVoltage" className="text-sm font-medium bg-zinc-800">
+            <label htmlFor="maxVoltage" className="text-sm font-medium text-neutral-100">
               Maximum Voltage (V)
             </label>
             <Input id="maxVoltage" type="number" step="0.1" value={settings.maxVoltage} onChange={e => onSettingChange('maxVoltage', e.target.value)} className="bg-neutral-700 border-neutral-600" />
@@ -37,7 +38,7 @@ const ChargingSettings = ({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="minVoltage" className="text-sm font-medium">
+            <label htmlFor="minVoltage" className="text-sm font-medium text-neutral-100">
               Minimum Voltage (V)
             </label>
             <Input id="minVoltage" type="number" step="0.1" value={settings.minVoltage} onChange={e => onSettingChange('minVoltage', e.target.value)} className="bg-neutral-700 border-neutral-600" />
@@ -45,7 +46,7 @@ const ChargingSettings = ({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="chargeCurrent" className="text-sm font-medium">
+            <label htmlFor="chargeCurrent" className="text-sm font-medium text-neutral-100">
               Charge Current (A)
             </label>
             <Input id="chargeCurrent" type="number" step="0.1" value={settings.chargeCurrent} onChange={e => onSettingChange('chargeCurrent', e.target.value)} className="bg-neutral-700 border-neutral-600" />
@@ -53,7 +54,7 @@ const ChargingSettings = ({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="terminationCurrent" className="text-sm font-medium">
+            <label htmlFor="terminationCurrent" className="text-sm font-medium text-neutral-100">
               Termination Current (A)
             </label>
             <Input id="terminationCurrent" type="number" step="0.01" value={settings.terminationCurrent} onChange={e => onSettingChange('terminationCurrent', e.target.value)} className="bg-neutral-700 border-neutral-600" />
@@ -61,7 +62,7 @@ const ChargingSettings = ({
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="maxTemperature" className="text-sm font-medium">
+            <label htmlFor="maxTemperature" className="text-sm font-medium text-neutral-100">
               Maximum Temperature (°C)
             </label>
             <Input id="maxTemperature" type="number" value={settings.maxTemperature} onChange={e => onSettingChange('maxTemperature', e.target.value)} className="bg-neutral-700 border-neutral-600" />

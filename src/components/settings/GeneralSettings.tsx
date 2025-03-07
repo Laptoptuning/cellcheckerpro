@@ -18,7 +18,7 @@ const GeneralSettings = ({ settings, onSettingChange }: GeneralSettingsProps) =>
     <Card className="bg-neutral-800 border-neutral-700">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Sliders className="h-5 w-5 text-neutral-100" />
+          <Sliders className="h-6 w-6 text-neutral-100" />
           General Test Settings
         </CardTitle>
         <CardDescription>
@@ -28,7 +28,7 @@ const GeneralSettings = ({ settings, onSettingChange }: GeneralSettingsProps) =>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="storageVoltage" className="text-sm font-medium">
+            <label htmlFor="storageVoltage" className="text-sm font-medium text-neutral-100">
               Storage Voltage (V)
             </label>
             <Input
@@ -43,7 +43,7 @@ const GeneralSettings = ({ settings, onSettingChange }: GeneralSettingsProps) =>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="maxCellsPerTest" className="text-sm font-medium">
+            <label htmlFor="maxCellsPerTest" className="text-sm font-medium text-neutral-100">
               Maximum Cells Per Test
             </label>
             <Input
@@ -57,7 +57,7 @@ const GeneralSettings = ({ settings, onSettingChange }: GeneralSettingsProps) =>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="logInterval" className="text-sm font-medium">
+            <label htmlFor="logInterval" className="text-sm font-medium text-neutral-100">
               Log Interval (seconds)
             </label>
             <Input

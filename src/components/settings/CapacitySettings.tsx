@@ -19,7 +19,7 @@ const CapacitySettings = ({ settings, onSettingChange }: CapacitySettingsProps) 
     <Card className="bg-neutral-800 border-neutral-700">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <FlaskConical className="h-5 w-5 text-warning-500" />
+          <FlaskConical className="h-6 w-6 text-neutral-100" />
           Capacity Test Settings
         </CardTitle>
         <CardDescription>
@@ -29,7 +29,7 @@ const CapacitySettings = ({ settings, onSettingChange }: CapacitySettingsProps) 
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="capacityChargeCurrent" className="text-sm font-medium">
+            <label htmlFor="capacityChargeCurrent" className="text-sm font-medium text-neutral-100">
               Charge Current (A)
             </label>
             <Input
@@ -44,7 +44,7 @@ const CapacitySettings = ({ settings, onSettingChange }: CapacitySettingsProps) 
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="capacityDischargeCurrent" className="text-sm font-medium">
+            <label htmlFor="capacityDischargeCurrent" className="text-sm font-medium text-neutral-100">
               Discharge Current (A)
             </label>
             <Input
@@ -59,7 +59,7 @@ const CapacitySettings = ({ settings, onSettingChange }: CapacitySettingsProps) 
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="restPeriod" className="text-sm font-medium">
+            <label htmlFor="restPeriod" className="text-sm font-medium text-neutral-100">
               Rest Period (minutes)
             </label>
             <Input
@@ -73,7 +73,7 @@ const CapacitySettings = ({ settings, onSettingChange }: CapacitySettingsProps) 
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="cycles" className="text-sm font-medium">
+            <label htmlFor="cycles" className="text-sm font-medium text-neutral-100">
               Number of Cycles
             </label>
             <Input
@@ -83,7 +83,7 @@ const CapacitySettings = ({ settings, onSettingChange }: CapacitySettingsProps) 
               onChange={(e) => onSettingChange('cycles', e.target.value)}
               className="bg-neutral-700 border-neutral-600"
             />
-            <p className="text-xs text-neutral-400">Number of charge/discharge cycles for testing</p>
+            <p className="text-xs text-neutral-400">Number of measurements for averaging</p>
           </div>
         </div>
       </CardContent>

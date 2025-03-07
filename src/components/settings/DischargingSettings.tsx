@@ -18,7 +18,7 @@ const DischargingSettings = ({ settings, onSettingChange }: DischargingSettingsP
     <Card className="bg-neutral-800 border-neutral-700">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Battery className="h-5 w-5 text-warning-400" />
+          <Battery className="h-6 w-6 text-neutral-100" />
           Discharging Test Settings
         </CardTitle>
         <CardDescription>
@@ -28,7 +28,7 @@ const DischargingSettings = ({ settings, onSettingChange }: DischargingSettingsP
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="cutoffVoltage" className="text-sm font-medium">
+            <label htmlFor="cutoffVoltage" className="text-sm font-medium text-neutral-100">
               Cutoff Voltage (V)
             </label>
             <Input
@@ -43,7 +43,7 @@ const DischargingSettings = ({ settings, onSettingChange }: DischargingSettingsP
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="dischargeCurrent" className="text-sm font-medium">
+            <label htmlFor="dischargeCurrent" className="text-sm font-medium text-neutral-100">
               Discharge Current (A)
             </label>
             <Input
@@ -58,7 +58,7 @@ const DischargingSettings = ({ settings, onSettingChange }: DischargingSettingsP
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="maxDischargeTemp" className="text-sm font-medium">
+            <label htmlFor="maxDischargeTemp" className="text-sm font-medium text-neutral-100">
               Maximum Temperature (°C)
             </label>
             <Input
