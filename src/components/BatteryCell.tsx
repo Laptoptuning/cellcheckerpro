@@ -6,16 +6,30 @@ import ColorBar from './ColorBar';
 import StatusIndicator from './StatusIndicator';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
 
 interface BatteryCellProps {
   battery: Battery;
   className?: string;
   onClick?: (battery: Battery) => void;
+  onSelect?: () => void;
+  isSelected?: boolean;
 }
 
-const BatteryCell: React.FC<BatteryCellProps> = ({ battery, className, onClick }) => {
+const BatteryCell: React.FC<BatteryCellProps> = ({ 
+  battery, 
+  className, 
+  onClick,
+  onSelect,
+  isSelected = false
+}) => {
   const handleClick = () => {
     if (onClick) onClick(battery);
+  };
+
+  const handleSelectClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onSelect) onSelect();
   };
   
   // Determine voltage status
@@ -42,16 +56,31 @@ const BatteryCell: React.FC<BatteryCellProps> = ({ battery, className, onClick }
   return (
     <div 
       className={cn(
-        'battery-cell glass-card relative p-5 flex flex-col gap-4 cursor-pointer',
+        'battery-cell relative p-5 flex flex-col gap-4 cursor-pointer bg-neutral-800 border border-neutral-700 rounded-xl hover:bg-neutral-750 transition-all',
         {
           'ring-2 ring-success-500': battery.status === 'good',
           'ring-2 ring-warning-500': battery.status === 'warning',
           'ring-2 ring-danger-500': battery.status === 'danger',
+          'bg-neutral-750 border-primary': isSelected,
         },
         className
       )}
       onClick={handleClick}
     >
+      {/* Selection checkbox */}
+      <div 
+        className={cn(
+          "absolute top-2 left-2 w-5 h-5 rounded-full border border-neutral-600 z-10 cursor-pointer flex items-center justify-center",
+          {
+            "bg-primary border-primary": isSelected,
+            "hover:border-primary": !isSelected
+          }
+        )}
+        onClick={handleSelectClick}
+      >
+        {isSelected && <Check className="w-3 h-3 text-white" />}
+      </div>
+
       {/* Updated indicator */}
       <div className="absolute top-2 right-2 flex items-center gap-1.5">
         <div className={cn(
@@ -62,14 +91,14 @@ const BatteryCell: React.FC<BatteryCellProps> = ({ battery, className, onClick }
             'bg-danger-500': battery.status === 'danger',
           }
         )} />
-        <span className="text-xs text-neutral-500">
+        <span className="text-xs text-neutral-400">
           {formatDistanceToNow(battery.lastUpdated, { addSuffix: true })}
         </span>
       </div>
       
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">{battery.name}</h3>
+        <h3 className="text-lg font-semibold text-neutral-100">{battery.name}</h3>
         <StatusIndicator 
           status={battery.status} 
           value={battery.cycleCount} 

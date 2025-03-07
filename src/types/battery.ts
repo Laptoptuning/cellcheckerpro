@@ -1,4 +1,6 @@
 
+export type TestType = 'charge' | 'discharge' | 'esr' | 'capacity' | 'macro' | 'store';
+
 export interface Battery {
   id: number;
   name: string;
@@ -10,4 +12,6 @@ export interface Battery {
   cycleCount: number; // Number of charge/discharge cycles
   status: 'good' | 'warning' | 'danger'; // Overall status
   lastUpdated: Date; // Last updated timestamp
+  isUnderTest?: boolean; // Whether the battery is currently being tested
+  currentTest?: TestType; // Current test being performed
 }

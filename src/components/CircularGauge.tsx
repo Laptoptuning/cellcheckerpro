@@ -81,7 +81,7 @@ const CircularGauge: React.FC<CircularGaugeProps> = ({
           cy={sizePx / 2}
           r={radius}
           fill="transparent"
-          stroke="#e5e7eb"
+          stroke="#333333"
           strokeWidth={strokeW}
           className="opacity-20"
         />
@@ -105,7 +105,7 @@ const CircularGauge: React.FC<CircularGaugeProps> = ({
         <span className={`font-semibold ${valueSizeClass} transition-all duration-300`} style={{ color }}>
           {Math.round(normalizedValue)}%
         </span>
-        {label && <span className={`${textSizeClass} text-neutral-500 mt-1`}>{label}</span>}
+        {label && <span className={`${textSizeClass} text-neutral-400 mt-1`}>{label}</span>}
       </div>
     </div>
   );

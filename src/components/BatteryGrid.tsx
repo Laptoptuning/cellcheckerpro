@@ -5,7 +5,15 @@ import BatteryCell from './BatteryCell';
 import { generateMockBatteries, updateBatteryData } from '@/utils/mockData';
 import DetailedView from './DetailedView';
 
-const BatteryGrid: React.FC = () => {
+interface BatteryGridProps {
+  onSelectCell?: (cellId: number, selected: boolean) => void;
+  selectedCells?: number[];
+}
+
+const BatteryGrid: React.FC<BatteryGridProps> = ({ 
+  onSelectCell,
+  selectedCells = []
+}) => {
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const [selectedBattery, setSelectedBattery] = useState<Battery | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,6 +39,14 @@ const BatteryGrid: React.FC = () => {
     setIsModalOpen(true);
   };
   
+  // Handle cell selection
+  const handleCellSelection = (battery: Battery) => {
+    if (onSelectCell) {
+      const isSelected = selectedCells.includes(battery.id);
+      onSelectCell(battery.id, !isSelected);
+    }
+  };
+  
   // Close modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -44,6 +60,8 @@ const BatteryGrid: React.FC = () => {
             key={battery.id} 
             battery={battery} 
             onClick={handleCellClick}
+            onSelect={() => handleCellSelection(battery)}
+            isSelected={selectedCells.includes(battery.id)}
             className="animate-scale-in"
           />
         ))}
