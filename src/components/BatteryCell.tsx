@@ -5,7 +5,7 @@ import ColorBar from './ColorBar';
 import StatusIndicator from './StatusIndicator';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { Check, Battery as BatteryIcon } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface BatteryCellProps {
   battery: Battery;
@@ -52,7 +52,7 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
     return 'good';
   };
 
-  // Get battery icon color based on SOC
+  // Get battery color based on SOC
   const getBatteryColor = (soc: number): string => {
     if (soc < 20) return '#ef4444'; // red
     if (soc < 50) return '#f59e0b'; // amber
@@ -102,38 +102,36 @@ const BatteryCell: React.FC<BatteryCellProps> = ({
       {/* Header */}
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold text-neutral-100">{battery.name}</h3>
-        <StatusIndicator 
-          status={battery.status} 
-          value={battery.status.charAt(0).toUpperCase() + battery.status.slice(1)}
-          size="sm"
-        />
       </div>
       
-      {/* Battery icon and SOC - IMPROVED BATTERY FILL */}
-      <div className="flex justify-center items-center gap-4 my-2">
-        <div className="relative flex items-center justify-center">
-          <BatteryIcon 
-            size={64} 
-            className="text-neutral-600"
-          />
-          <div 
-            className="absolute inset-0 flex items-center justify-start"
-            style={{ width: '83%', left: '2px', right: '15%' }}
-          >
+      {/* Modern glossy battery design */}
+      <div className="flex justify-center items-center gap-4 my-3">
+        <div className="relative w-64 h-24 mx-auto">
+          {/* Battery outline */}
+          <div className="absolute inset-0 rounded-full bg-neutral-900 shadow-lg"></div>
+          
+          {/* Battery container */}
+          <div className="absolute inset-0 rounded-full overflow-hidden border border-neutral-600">
+            {/* Glossy battery fill */}
             <div 
-              className="h-[60%] rounded-sm transition-all duration-500" 
+              className="h-full transition-all duration-500 relative"
               style={{ 
                 width: `${battery.soc}%`, 
-                backgroundColor: getBatteryColor(battery.soc),
-                maxWidth: '100%'
-              }} 
-            />
+                background: `linear-gradient(to bottom, ${getBatteryColor(battery.soc)}bb, ${getBatteryColor(battery.soc)})`,
+              }}
+            >
+              {/* Glossy highlight */}
+              <div className="absolute top-0 left-0 right-0 h-[30%] bg-white opacity-30 rounded-t-full"></div>
+            </div>
+            
+            {/* Battery tip */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-neutral-500 rounded-r-sm"></div>
           </div>
-          <span className="absolute text-sm font-semibold text-white">{Math.round(battery.soc)}%</span>
-        </div>
-        <div className="flex flex-col items-start">
-          <span className="text-xl font-semibold text-neutral-100">{battery.voltage.toFixed(1)}V</span>
-          <span className="text-xs text-neutral-400">State of Charge</span>
+          
+          {/* Battery percentage */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-lg font-bold text-white drop-shadow-md">{Math.round(battery.soc)}%</span>
+          </div>
         </div>
       </div>
       
