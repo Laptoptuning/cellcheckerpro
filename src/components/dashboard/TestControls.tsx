@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { TestType } from '@/types/battery';
 import { Zap, MoveDown, TestTube, Trash, Battery, Play, Pause, FlaskConical } from 'lucide-react';
 import StatusCard from './StatusCard';
+import { isApiConnected } from '@/services/apiService';
 
 interface TestControlsProps {
   selectedCells: number[];
@@ -23,12 +24,24 @@ const TestControls: React.FC<TestControlsProps> = ({
   onStopTest,
   onDisposeCells
 }) => {
+  // Determine if we need to show simulation mode indicator
+  const simulationMode = !isApiConnected();
+  
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
       <Card className="bg-neutral-800 border-neutral-700 col-span-1 lg:col-span-3">
         <CardHeader>
-          <CardTitle className="text-neutral-100">Test Controls</CardTitle>
-          <CardDescription className="text-neutral-400">Start or stop tests for selected cells</CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-neutral-100">Test Controls</CardTitle>
+              <CardDescription className="text-neutral-400">
+                Start or stop tests for selected cells
+                {simulationMode && (
+                  <span className="ml-2 text-warning-400">(Simulation Mode)</span>
+                )}
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
