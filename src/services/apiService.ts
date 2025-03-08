@@ -1,6 +1,6 @@
 import { Battery, TestType } from '@/types/battery';
 import { toast } from '@/components/ui/use-toast';
-import { mockBatteries } from '@/utils/mockData';
+import { generateMockBatteries } from '@/utils/mockData';
 
 // Make API URL configurable - could be set through settings in the future
 const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.178.178:8000';
@@ -8,6 +8,9 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.178.178:8000';
 // Keep track of connection state
 let isConnected = false;
 let connectionAttempted = false;
+
+// Generate mock batteries once to use as fallback
+const mockBatteries = generateMockBatteries(16);
 
 /**
  * Fetches battery data from the API
@@ -83,7 +86,8 @@ export const fetchBatteryData = async (): Promise<Battery[]> => {
     }
     
     isConnected = false;
-    connectionAttempted = 'shown'; // Change the value to avoid showing the toast again
+    // Fix: change the string to boolean to resolve type error
+    connectionAttempted = true; 
     
     // Return mock data as fallback
     return mockBatteries;
