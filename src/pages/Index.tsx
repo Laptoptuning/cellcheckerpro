@@ -7,7 +7,8 @@ import { toast } from '@/components/ui/use-toast';
 import LoadingState from '@/components/dashboard/LoadingState';
 import TestControls from '@/components/dashboard/TestControls';
 import CellStatusOverview from '@/components/dashboard/CellStatusOverview';
-import { loadBatteries, saveBattery } from '@/services/batteryStorage';
+import { saveBattery } from '@/services/batteryStorage';
+import { startTest, stopTest, disposeCells } from '@/services/apiService';
 
 const Index: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +26,7 @@ const Index: React.FC = () => {
   }, []);
 
   // Handler for starting a test
-  const handleStartTest = (testType: TestType) => {
+  const handleStartTest = async (testType: TestType) => {
     if (selectedCells.length === 0) {
       toast({
         title: "No cells selected",
@@ -35,54 +36,80 @@ const Index: React.FC = () => {
       return;
     }
 
-    setTestInProgress(true);
-    setCurrentTest(testType);
-    
-    // Update the battery state in storage to show they're under test
-    const batteries = loadBatteries();
-    selectedCells.forEach(cellId => {
-      const battery = batteries.find(b => b.id === cellId);
-      if (battery) {
-        saveBattery({
-          ...battery,
-          isUnderTest: true,
-          currentTest: testType
+    try {
+      // Send request to start test via API
+      const success = await startTest(selectedCells, testType);
+      
+      if (success) {
+        setTestInProgress(true);
+        setCurrentTest(testType);
+        
+        // Update local state for UI
+        selectedCells.forEach(cellId => {
+          saveBattery({
+            id: cellId,
+            isUnderTest: true,
+            currentTest: testType,
+            lastUpdated: new Date()
+          } as any);
         });
+        
+        toast({
+          title: "Test started",
+          description: `Starting ${testType} test for ${selectedCells.length} selected cells.`,
+        });
+      } else {
+        throw new Error("Failed to start test");
       }
-    });
-    
-    toast({
-      title: "Test started",
-      description: `Starting ${testType} test for ${selectedCells.length} selected cells.`,
-    });
+    } catch (error) {
+      console.error("Error starting test:", error);
+      toast({
+        title: "Error",
+        description: "Failed to start test. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   // Handler for stopping a test
-  const handleStopTest = () => {
-    setTestInProgress(false);
-    setCurrentTest(null);
-    
-    // Update the battery state in storage to show they're no longer under test
-    const batteries = loadBatteries();
-    selectedCells.forEach(cellId => {
-      const battery = batteries.find(b => b.id === cellId);
-      if (battery) {
-        saveBattery({
-          ...battery,
-          isUnderTest: false,
-          currentTest: undefined
+  const handleStopTest = async () => {
+    try {
+      // Send request to stop test via API
+      const success = await stopTest(selectedCells);
+      
+      if (success) {
+        setTestInProgress(false);
+        setCurrentTest(null);
+        
+        // Update local state for UI
+        selectedCells.forEach(cellId => {
+          saveBattery({
+            id: cellId,
+            isUnderTest: false,
+            currentTest: undefined,
+            lastUpdated: new Date()
+          } as any);
         });
+        
+        toast({
+          title: "Test stopped",
+          description: "The current test has been stopped.",
+        });
+      } else {
+        throw new Error("Failed to stop test");
       }
-    });
-    
-    toast({
-      title: "Test stopped",
-      description: "The current test has been stopped.",
-    });
+    } catch (error) {
+      console.error("Error stopping test:", error);
+      toast({
+        title: "Error",
+        description: "Failed to stop test. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   // Handler for disposing cells
-  const handleDisposeCells = () => {
+  const handleDisposeCells = async () => {
     if (selectedCells.length === 0) {
       toast({
         title: "No cells selected",
@@ -92,25 +119,38 @@ const Index: React.FC = () => {
       return;
     }
     
-    // Mark batteries as disposed in storage
-    const batteries = loadBatteries();
-    selectedCells.forEach(cellId => {
-      const battery = batteries.find(b => b.id === cellId);
-      if (battery) {
-        saveBattery({
-          ...battery,
-          status: 'danger',
-          disposed: true
+    try {
+      // Send request to dispose cells via API
+      const success = await disposeCells(selectedCells);
+      
+      if (success) {
+        // Update local state for UI
+        selectedCells.forEach(cellId => {
+          saveBattery({
+            id: cellId,
+            status: 'danger',
+            disposed: true,
+            lastUpdated: new Date()
+          } as any);
         });
+        
+        toast({
+          title: "Cells marked for disposal",
+          description: `${selectedCells.length} cells marked for disposal.`,
+        });
+        
+        setSelectedCells([]);
+      } else {
+        throw new Error("Failed to dispose cells");
       }
-    });
-    
-    toast({
-      title: "Cells marked for disposal",
-      description: `${selectedCells.length} cells marked for disposal.`,
-    });
-    
-    setSelectedCells([]);
+    } catch (error) {
+      console.error("Error disposing cells:", error);
+      toast({
+        title: "Error",
+        description: "Failed to mark cells for disposal. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   // Update selected cells

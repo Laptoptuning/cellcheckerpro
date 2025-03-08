@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,12 +34,12 @@ const TestControls: React.FC<TestControlsProps> = ({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 h-20 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
+              className="flex flex-col items-center justify-center gap-3 h-24 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
               onClick={() => onStartTest('charge')}
               disabled={testInProgress}
             >
-              <Zap className="h-5 w-5 text-success-400" />
-              <div className="flex flex-col items-start">
+              <Zap className="h-8 w-8 text-success-400" />
+              <div className="flex flex-col items-center text-center">
                 <span>Start Charging</span>
                 <span className="text-xs text-neutral-400">Charge to 4.2V</span>
               </div>
@@ -46,12 +47,12 @@ const TestControls: React.FC<TestControlsProps> = ({
             
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 h-20 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
+              className="flex flex-col items-center justify-center gap-3 h-24 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
               onClick={() => onStartTest('discharge')}
               disabled={testInProgress}
             >
-              <MoveDown className="h-5 w-5 text-warning-400" />
-              <div className="flex flex-col items-start">
+              <MoveDown className="h-8 w-8 text-warning-400" />
+              <div className="flex flex-col items-center text-center">
                 <span>Start Discharging</span>
                 <span className="text-xs text-neutral-400">Discharge to 2.8V</span>
               </div>
@@ -59,12 +60,12 @@ const TestControls: React.FC<TestControlsProps> = ({
             
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 h-20 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
+              className="flex flex-col items-center justify-center gap-3 h-24 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
               onClick={() => onStartTest('esr')}
               disabled={testInProgress}
             >
-              <TestTube className="h-5 w-5 text-primary" />
-              <div className="flex flex-col items-start">
+              <TestTube className="h-8 w-8 text-primary" />
+              <div className="flex flex-col items-center text-center">
                 <span>Measure ESR</span>
                 <span className="text-xs text-neutral-400">Internal resistance</span>
               </div>
@@ -72,12 +73,12 @@ const TestControls: React.FC<TestControlsProps> = ({
             
             <Button 
               variant="outline" 
-              className="flex items-center gap-2 h-20 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
+              className="flex flex-col items-center justify-center gap-3 h-24 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600"
               onClick={() => onStartTest('capacity')}
               disabled={testInProgress}
             >
-              <FlaskConical className="h-5 w-5 text-warning-500" />
-              <div className="flex flex-col items-start">
+              <FlaskConical className="h-8 w-8 text-warning-500" />
+              <div className="flex flex-col items-center text-center">
                 <span>Measure Capacity</span>
                 <span className="text-xs text-neutral-400">Full cycle test</span>
               </div>
@@ -91,7 +92,7 @@ const TestControls: React.FC<TestControlsProps> = ({
               onClick={onDisposeCells}
               disabled={testInProgress || selectedCells.length === 0}
             >
-              <Trash className="h-4 w-4" />
+              <Trash className="h-5 w-5" />
               <span>Dispose Cells</span>
             </Button>
             
@@ -102,7 +103,7 @@ const TestControls: React.FC<TestControlsProps> = ({
                 onClick={() => onStartTest('store')}
                 disabled={testInProgress || selectedCells.length === 0}
               >
-                <Battery className="h-4 w-4 text-success-400" />
+                <Battery className="h-5 w-5 text-success-400" />
                 <span>Store (3.4V)</span>
               </Button>
               
@@ -112,7 +113,7 @@ const TestControls: React.FC<TestControlsProps> = ({
                   className="bg-danger-500 hover:bg-danger-600 flex items-center gap-2"
                   onClick={onStopTest}
                 >
-                  <Pause className="h-4 w-4" />
+                  <Pause className="h-5 w-5" />
                   <span>Stop Test</span>
                 </Button>
               ) : (
@@ -122,7 +123,7 @@ const TestControls: React.FC<TestControlsProps> = ({
                   onClick={() => onStartTest('macro')}
                   disabled={selectedCells.length === 0}
                 >
-                  <Play className="h-4 w-4" />
+                  <Play className="h-5 w-5" />
                   <span>Start Macro</span>
                 </Button>
               )}

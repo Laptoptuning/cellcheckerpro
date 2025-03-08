@@ -1,12 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Battery } from '@/types/battery';
 import BatteryCell from './BatteryCell';
-import { generateMockBatteries, updateBatteryData } from '@/utils/mockData';
 import DetailedView from './DetailedView';
 import { Button } from '@/components/ui/button';
 import { CheckCheck, X } from 'lucide-react';
-import { loadBatteries, saveBattery, seedMockData } from '@/services/batteryStorage';
+import { loadBatteries, saveBattery } from '@/services/batteryStorage';
+import { fetchBatteryData } from '@/services/apiService';
+import { toast } from '@/components/ui/use-toast';
 
 interface BatteryGridProps {
   onSelectCell?: (cellId: number, selected: boolean) => void;
@@ -22,38 +22,54 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const [selectedBattery, setSelectedBattery] = useState<Battery | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   // Initialize batteries
   useEffect(() => {
-    // Attempt to load from storage first
-    const storedBatteries = loadBatteries();
-    
-    if (storedBatteries.length > 0) {
-      setBatteries(storedBatteries);
-    } else {
-      // No stored batteries, create mock data
-      const initialBatteries = generateMockBatteries(16);
-      setBatteries(initialBatteries);
-      
-      // Seed the storage with initial data
-      seedMockData(initialBatteries);
-    }
-    
-    // Simulate real-time updates
-    const interval = setInterval(() => {
-      setBatteries((prevBatteries) => {
-        const updatedBatteries = prevBatteries.map(battery => {
-          const updated = updateBatteryData(battery);
-          // Save the update to storage
-          saveBattery(updated);
-          return updated;
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        // Try to fetch from API first
+        const apiBatteries = await fetchBatteryData();
+        setBatteries(apiBatteries);
+        
+        // Store the fetched data in local storage
+        apiBatteries.forEach(battery => {
+          saveBattery(battery);
         });
-        return updatedBatteries;
-      });
-    }, 5000); // Update every 5 seconds
+        
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching battery data:', err);
+        setError('Could not connect to battery management system. Using cached data.');
+        
+        // Fallback to storage
+        const storedBatteries = loadBatteries();
+        setBatteries(storedBatteries);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
+    
+    // Set up polling interval
+    const interval = setInterval(fetchData, 5000);
     
     return () => clearInterval(interval);
   }, []);
+  
+  // Show toast for errors
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Connection Error",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error]);
   
   // Filter batteries if needed
   const displayedBatteries = showOnlyAvailable 
@@ -104,6 +120,7 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
       <div className="flex justify-between items-center mb-4">
         <div className="text-sm text-neutral-400">
           {selectedCells.length} of {displayedBatteries.length} cells selected
+          {isLoading && <span className="ml-2 animate-pulse"> (Refreshing...)</span>}
         </div>
         <Button
           variant="outline" 
@@ -125,18 +142,24 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
         </Button>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
-        {displayedBatteries.map((battery) => (
-          <BatteryCell 
-            key={battery.id} 
-            battery={battery} 
-            onClick={handleCellClick}
-            onSelect={() => handleCellSelection(battery)}
-            isSelected={selectedCells.includes(battery.id)}
-            className="animate-scale-in"
-          />
-        ))}
-      </div>
+      {isLoading && batteries.length === 0 ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
+          {displayedBatteries.map((battery) => (
+            <BatteryCell 
+              key={battery.id} 
+              battery={battery} 
+              onClick={handleCellClick}
+              onSelect={() => handleCellSelection(battery)}
+              isSelected={selectedCells.includes(battery.id)}
+              className="animate-scale-in"
+            />
+          ))}
+        </div>
+      )}
       
       {selectedBattery && (
         <DetailedView 
