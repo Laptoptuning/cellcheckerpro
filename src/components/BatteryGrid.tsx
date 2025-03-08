@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Battery } from '@/types/battery';
 import BatteryCell from './BatteryCell';
@@ -24,31 +25,41 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   
   // Initialize batteries
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
       try {
-        // Try to fetch from API first
-        const apiBatteries = await fetchBatteryData();
-        setBatteries(apiBatteries);
+        // Show refreshing indicator only after initial load
+        if (batteries.length > 0) {
+          setRefreshing(true);
+        }
+        
+        // Try to fetch from API (with fallback to mock data built in)
+        const fetchedBatteries = await fetchBatteryData();
+        setBatteries(fetchedBatteries);
         
         // Store the fetched data in local storage
-        apiBatteries.forEach(battery => {
+        fetchedBatteries.forEach(battery => {
           saveBattery(battery);
         });
         
         setError(null);
       } catch (err) {
-        console.error('Error fetching battery data:', err);
-        setError('Could not connect to battery management system. Using cached data.');
+        console.error('Error in battery data handling:', err);
+        setError('Error loading battery data. Please try again.');
         
-        // Fallback to storage
-        const storedBatteries = loadBatteries();
-        setBatteries(storedBatteries);
+        // Fallback to storage if we have absolutely nothing
+        if (batteries.length === 0) {
+          const storedBatteries = loadBatteries();
+          if (storedBatteries.length > 0) {
+            setBatteries(storedBatteries);
+          }
+        }
       } finally {
         setIsLoading(false);
+        setRefreshing(false);
       }
     };
     
@@ -64,7 +75,7 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
   useEffect(() => {
     if (error) {
       toast({
-        title: "Connection Error",
+        title: "Data Error",
         description: error,
         variant: "destructive",
       });
@@ -115,36 +126,80 @@ const BatteryGrid: React.FC<BatteryGridProps> = ({
     }
   };
   
+  // Manual refresh function
+  const handleManualRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const freshBatteries = await fetchBatteryData();
+      setBatteries(freshBatteries);
+      toast({
+        title: "Data Refreshed",
+        description: "Battery data has been manually refreshed",
+      });
+    } catch (err) {
+      toast({
+        title: "Refresh Failed",
+        description: "Could not refresh battery data",
+        variant: "destructive",
+      });
+    } finally {
+      setRefreshing(false);
+    }
+  };
+  
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-4">
         <div className="text-sm text-neutral-400">
           {selectedCells.length} of {displayedBatteries.length} cells selected
-          {isLoading && <span className="ml-2 animate-pulse"> (Refreshing...)</span>}
+          {refreshing && <span className="ml-2 animate-pulse"> (Refreshing...)</span>}
         </div>
-        <Button
-          variant="outline" 
-          size="sm"
-          className="flex items-center gap-2 bg-neutral-700 hover:bg-neutral-600 border-neutral-600"
-          onClick={handleSelectAllCells}
-        >
-          {selectedCells.length === displayedBatteries.length ? (
-            <>
-              <X className="h-4 w-4" />
-              <span>Deselect All</span>
-            </>
-          ) : (
-            <>
-              <CheckCheck className="h-4 w-4" />
-              <span>Select All</span>
-            </>
-          )}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline" 
+            size="sm"
+            className="flex items-center gap-2 bg-neutral-700 hover:bg-neutral-600 border-neutral-600"
+            onClick={handleManualRefresh}
+            disabled={refreshing}
+          >
+            <span>Refresh</span>
+          </Button>
+          <Button
+            variant="outline" 
+            size="sm"
+            className="flex items-center gap-2 bg-neutral-700 hover:bg-neutral-600 border-neutral-600"
+            onClick={handleSelectAllCells}
+          >
+            {selectedCells.length === displayedBatteries.length ? (
+              <>
+                <X className="h-4 w-4" />
+                <span>Deselect All</span>
+              </>
+            ) : (
+              <>
+                <CheckCheck className="h-4 w-4" />
+                <span>Select All</span>
+              </>
+            )}
+          </Button>
+        </div>
       </div>
       
       {isLoading && batteries.length === 0 ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      ) : displayedBatteries.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-64 text-neutral-400">
+          <p className="text-xl">No battery data available</p>
+          <p className="mt-2">Check your connection to the battery management system</p>
+          <Button 
+            variant="outline" 
+            className="mt-4 bg-neutral-700 hover:bg-neutral-600"
+            onClick={handleManualRefresh}
+          >
+            Try Again
+          </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">

@@ -1,16 +1,52 @@
 import { Battery, TestType } from '@/types/battery';
+import { toast } from '@/components/ui/use-toast';
+import { mockBatteries } from '@/utils/mockData';
 
-const API_BASE_URL = 'http://192.168.178.178:8000';
+// Make API URL configurable - could be set through settings in the future
+const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.178.178:8000';
 
+// Keep track of connection state
+let isConnected = false;
+let connectionAttempted = false;
+
+/**
+ * Fetches battery data from the API
+ * Falls back to mock data if the API is unavailable
+ */
 export const fetchBatteryData = async (): Promise<Battery[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/`);
+    // If we've already tried and failed, don't keep hammering the API
+    if (connectionAttempted && !isConnected) {
+      console.log('Using mock data (API previously unreachable)');
+      return mockBatteries;
+    }
+    
+    connectionAttempted = true;
+    
+    // Add a timeout to the fetch to avoid long waits
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    const response = await fetch(`${API_URL}/`, {
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
     
     const data = await response.json();
+    
+    // Connection successful
+    if (!isConnected) {
+      isConnected = true;
+      toast({
+        title: "Connected to Battery Management System",
+        description: "Successfully connected to the BMS API",
+      });
+    }
     
     // Transform the backend data to match our Battery type
     return data.map((item: any) => ({
@@ -30,14 +66,45 @@ export const fetchBatteryData = async (): Promise<Battery[]> => {
       capacityAh: item.capacity || 3000, // assuming capacity is in mAh
     }));
   } catch (error) {
-    console.error('Error fetching battery data:', error);
-    throw error;
+    // Handle connection errors
+    if (!isConnected && connectionAttempted) {
+      console.warn('Could not connect to battery management system API, using mock data');
+      
+      // Only show the toast once
+      if (connectionAttempted === true) {
+        toast({
+          title: "Connection Error",
+          description: "Could not connect to Battery Management System. Using simulated data.",
+          variant: "destructive",
+        });
+      }
+    } else {
+      console.error('Error fetching battery data:', error);
+    }
+    
+    isConnected = false;
+    connectionAttempted = 'shown'; // Change the value to avoid showing the toast again
+    
+    // Return mock data as fallback
+    return mockBatteries;
   }
 };
 
 export const startTest = async (cellIds: number[], testType: TestType): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/start-test`, {
+    // If we know the API is not available, don't try to call it
+    if (!isConnected) {
+      toast({
+        title: "Simulation Mode",
+        description: `Starting ${testType} test simulation for selected cells.`,
+      });
+      return true;
+    }
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    const response = await fetch(`${API_URL}/start-test`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +113,10 @@ export const startTest = async (cellIds: number[], testType: TestType): Promise<
         cellIds,
         testType,
       }),
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
@@ -55,13 +125,35 @@ export const startTest = async (cellIds: number[], testType: TestType): Promise<
     return true;
   } catch (error) {
     console.error(`Error starting ${testType} test:`, error);
-    return false;
+    
+    // If we hit an error, assume we're not connected
+    isConnected = false;
+    
+    // In simulation mode, still return success
+    toast({
+      title: "Simulation Mode",
+      description: `Starting ${testType} test simulation for selected cells. (API unavailable)`,
+    });
+    
+    return true;
   }
 };
 
 export const stopTest = async (cellIds: number[]): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/stop-test`, {
+    // If we know the API is not available, don't try to call it
+    if (!isConnected) {
+      toast({
+        title: "Simulation Mode",
+        description: "Stopping test simulation for selected cells.",
+      });
+      return true;
+    }
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    const response = await fetch(`${API_URL}/stop-test`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -69,7 +161,10 @@ export const stopTest = async (cellIds: number[]): Promise<boolean> => {
       body: JSON.stringify({
         cellIds,
       }),
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
@@ -78,13 +173,35 @@ export const stopTest = async (cellIds: number[]): Promise<boolean> => {
     return true;
   } catch (error) {
     console.error('Error stopping test:', error);
-    return false;
+    
+    // If we hit an error, assume we're not connected
+    isConnected = false;
+    
+    // In simulation mode, still return success
+    toast({
+      title: "Simulation Mode",
+      description: "Stopping test simulation for selected cells. (API unavailable)",
+    });
+    
+    return true;
   }
 };
 
 export const disposeCells = async (cellIds: number[]): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/dispose-cells`, {
+    // If we know the API is not available, don't try to call it
+    if (!isConnected) {
+      toast({
+        title: "Simulation Mode",
+        description: "Marking selected cells as disposed in simulation.",
+      });
+      return true;
+    }
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    const response = await fetch(`${API_URL}/dispose-cells`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -92,7 +209,10 @@ export const disposeCells = async (cellIds: number[]): Promise<boolean> => {
       body: JSON.stringify({
         cellIds,
       }),
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
@@ -101,7 +221,17 @@ export const disposeCells = async (cellIds: number[]): Promise<boolean> => {
     return true;
   } catch (error) {
     console.error('Error disposing cells:', error);
-    return false;
+    
+    // If we hit an error, assume we're not connected
+    isConnected = false;
+    
+    // In simulation mode, still return success
+    toast({
+      title: "Simulation Mode",
+      description: "Marking selected cells as disposed in simulation. (API unavailable)",
+    });
+    
+    return true;
   }
 };
 
