@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { TestType } from '@/types/battery';
 import { Zap, MoveDown, TestTube, Trash, Battery, Play, Pause, FlaskConical } from 'lucide-react';
 import StatusCard from './StatusCard';
-import { isApiConnected } from '@/services/apiService';
+import { isApiConnected, startMacroTest, disposeCells } from '@/services/apiService';
 
 interface TestControlsProps {
   selectedCells: number[];
@@ -26,6 +26,28 @@ const TestControls: React.FC<TestControlsProps> = ({
 }) => {
   // Determine if we need to show simulation mode indicator
   const simulationMode = !isApiConnected();
+  
+  // Handle starting macro test
+  const handleStartMacro = async () => {
+    if (selectedCells.length === 0) return;
+    
+    // Call the API function
+    await startMacroTest(selectedCells);
+    
+    // Also call the parent handler to update UI state
+    onStartTest('macro' as TestType);
+  };
+  
+  // Handle disposing cells
+  const handleDisposeCells = async () => {
+    if (selectedCells.length === 0) return;
+    
+    // Call the API function
+    await disposeCells(selectedCells);
+    
+    // Also call the parent handler to update UI state
+    onDisposeCells();
+  };
   
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -102,7 +124,7 @@ const TestControls: React.FC<TestControlsProps> = ({
             <Button 
               variant="destructive" 
               className="flex items-center gap-2"
-              onClick={onDisposeCells}
+              onClick={handleDisposeCells}
               disabled={testInProgress || selectedCells.length === 0}
             >
               <Trash className="h-5 w-5" />
@@ -133,7 +155,7 @@ const TestControls: React.FC<TestControlsProps> = ({
                 <Button 
                   variant="default" 
                   className="bg-primary hover:bg-primary/90 flex items-center gap-2"
-                  onClick={() => onStartTest('macro')}
+                  onClick={handleStartMacro}
                   disabled={selectedCells.length === 0}
                 >
                   <Play className="h-5 w-5" />

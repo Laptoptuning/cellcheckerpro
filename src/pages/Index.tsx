@@ -8,6 +8,7 @@ import LoadingState from '@/components/dashboard/LoadingState';
 import TestControls from '@/components/dashboard/TestControls';
 import CellStatusOverview from '@/components/dashboard/CellStatusOverview';
 import { loadBatteries, saveBattery } from '@/services/batteryStorage';
+import { startTest, stopTest, disposeCells } from '@/services/apiService';
 
 const Index: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +26,7 @@ const Index: React.FC = () => {
   }, []);
 
   // Handler for starting a test
-  const handleStartTest = (testType: TestType) => {
+  const handleStartTest = async (testType: TestType) => {
     if (selectedCells.length === 0) {
       toast({
         title: "No cells selected",
@@ -35,54 +36,62 @@ const Index: React.FC = () => {
       return;
     }
 
-    setTestInProgress(true);
-    setCurrentTest(testType);
+    const result = await startTest(selectedCells, testType);
     
-    // Update the battery state in storage to show they're under test
-    const batteries = loadBatteries();
-    selectedCells.forEach(cellId => {
-      const battery = batteries.find(b => b.id === cellId);
-      if (battery) {
-        saveBattery({
-          ...battery,
-          isUnderTest: true,
-          currentTest: testType
-        });
-      }
-    });
-    
-    toast({
-      title: "Test started",
-      description: `Starting ${testType} test for ${selectedCells.length} selected cells.`,
-    });
+    if (result) {
+      setTestInProgress(true);
+      setCurrentTest(testType);
+      
+      // Update the battery state in storage to show they're under test
+      const batteries = loadBatteries();
+      selectedCells.forEach(cellId => {
+        const battery = batteries.find(b => b.id === cellId);
+        if (battery) {
+          saveBattery({
+            ...battery,
+            isUnderTest: true,
+            currentTest: testType
+          });
+        }
+      });
+      
+      toast({
+        title: "Test started",
+        description: `Starting ${testType} test for ${selectedCells.length} selected cells.`,
+      });
+    }
   };
 
   // Handler for stopping a test
-  const handleStopTest = () => {
-    setTestInProgress(false);
-    setCurrentTest(null);
+  const handleStopTest = async () => {
+    const result = await stopTest(selectedCells);
     
-    // Update the battery state in storage to show they're no longer under test
-    const batteries = loadBatteries();
-    selectedCells.forEach(cellId => {
-      const battery = batteries.find(b => b.id === cellId);
-      if (battery) {
-        saveBattery({
-          ...battery,
-          isUnderTest: false,
-          currentTest: undefined
-        });
-      }
-    });
-    
-    toast({
-      title: "Test stopped",
-      description: "The current test has been stopped.",
-    });
+    if (result) {
+      setTestInProgress(false);
+      setCurrentTest(null);
+      
+      // Update the battery state in storage to show they're no longer under test
+      const batteries = loadBatteries();
+      selectedCells.forEach(cellId => {
+        const battery = batteries.find(b => b.id === cellId);
+        if (battery) {
+          saveBattery({
+            ...battery,
+            isUnderTest: false,
+            currentTest: undefined
+          });
+        }
+      });
+      
+      toast({
+        title: "Test stopped",
+        description: "The current test has been stopped.",
+      });
+    }
   };
 
   // Handler for disposing cells
-  const handleDisposeCells = () => {
+  const handleDisposeCells = async () => {
     if (selectedCells.length === 0) {
       toast({
         title: "No cells selected",
@@ -92,25 +101,29 @@ const Index: React.FC = () => {
       return;
     }
     
-    // Mark batteries as disposed in storage
-    const batteries = loadBatteries();
-    selectedCells.forEach(cellId => {
-      const battery = batteries.find(b => b.id === cellId);
-      if (battery) {
-        saveBattery({
-          ...battery,
-          status: 'danger',
-          disposed: true
-        });
-      }
-    });
+    const result = await disposeCells(selectedCells);
     
-    toast({
-      title: "Cells marked for disposal",
-      description: `${selectedCells.length} cells marked for disposal.`,
-    });
-    
-    setSelectedCells([]);
+    if (result) {
+      // Mark batteries as disposed in storage
+      const batteries = loadBatteries();
+      selectedCells.forEach(cellId => {
+        const battery = batteries.find(b => b.id === cellId);
+        if (battery) {
+          saveBattery({
+            ...battery,
+            status: 'danger',
+            disposed: true
+          });
+        }
+      });
+      
+      toast({
+        title: "Cells marked for disposal",
+        description: `${selectedCells.length} cells marked for disposal.`,
+      });
+      
+      setSelectedCells([]);
+    }
   };
 
   // Update selected cells
