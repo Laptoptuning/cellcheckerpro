@@ -39,7 +39,7 @@ const TestControls: React.FC<TestControlsProps> = ({
               disabled={testInProgress}
             >
               <Zap className="h-8 w-8 text-success-400" />
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center">
                 <span>Start Charging</span>
                 <span className="text-xs text-neutral-400">Charge to 4.2V</span>
               </div>
@@ -52,7 +52,7 @@ const TestControls: React.FC<TestControlsProps> = ({
               disabled={testInProgress}
             >
               <MoveDown className="h-8 w-8 text-warning-400" />
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center">
                 <span>Start Discharging</span>
                 <span className="text-xs text-neutral-400">Discharge to 2.8V</span>
               </div>
@@ -65,7 +65,7 @@ const TestControls: React.FC<TestControlsProps> = ({
               disabled={testInProgress}
             >
               <TestTube className="h-8 w-8 text-primary" />
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center">
                 <span>Measure ESR</span>
                 <span className="text-xs text-neutral-400">Internal resistance</span>
               </div>
@@ -78,7 +78,7 @@ const TestControls: React.FC<TestControlsProps> = ({
               disabled={testInProgress}
             >
               <FlaskConical className="h-8 w-8 text-warning-500" />
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center">
                 <span>Measure Capacity</span>
                 <span className="text-xs text-neutral-400">Full cycle test</span>
               </div>
